@@ -5,6 +5,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+import java.util.List;
+
 public class EmployeeDAO {
 
     private static final EntityManagerFactory emf =
@@ -23,6 +25,25 @@ public class EmployeeDAO {
                 em.getTransaction().rollback();
             }
             throw ex;
+        } finally {
+            em.close();
+        }
+    }
+
+    public Employee findById(Long id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.find(Employee.class, id);
+        } finally {
+            em.close(); // Dam bao luon dong EntityManager
+        }
+    }
+
+    public List<Employee> findAll() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT e FROM Employee e", Employee.class)
+                    .getResultList();
         } finally {
             em.close();
         }

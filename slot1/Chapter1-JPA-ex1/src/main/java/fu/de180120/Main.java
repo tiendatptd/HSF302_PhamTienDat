@@ -87,5 +87,24 @@ public class Main {
         } else {
             System.out.println("Khong tim thay nhan vien ID = 1 de update.");
         }
+
+        // TODO 0.7: DELETE
+        System.out.println("\n=== KIEM THU TODO 0.7 (DELETE: remove) ===");
+        Long deleteId = 3L; // Chọn ID của nhân viên Tran Van C để xóa
+
+        Employee empToDelete = dao.findById(deleteId);
+        if (empToDelete != null) {
+            System.out.println("Tim thay nhan vien can xoa: " + empToDelete);
+
+            // Goi hàm delete
+            boolean isDeleted = dao.delete(deleteId);
+            System.out.println("Ket qua xoa ID " + deleteId + ": " + isDeleted);
+
+            // Fetch lai tu DB de kiem tra: findById phai tra ve null
+            Employee checkDeleted = dao.findById(deleteId);
+            System.out.println("Kiem tra findById(" + deleteId + ") sau khi xoa: " + checkDeleted);
+        } else {
+            System.out.println("Khong tim thay nhan vien ID = " + deleteId + " de xoa.");
+        }
     }
 }

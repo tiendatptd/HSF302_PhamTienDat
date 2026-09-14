@@ -95,4 +95,31 @@ public class EmployeeDAO {
             em.close();
         }
     }
+
+    public boolean delete(Long id) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // 1. Find entity trong cùng EntityManager để đảm bảo entity ở trạng thái Managed
+            Employee employee = em.find(Employee.class, id);
+
+            // 2. Kiểm tra != null trước khi thực hiện remove
+            if (employee != null) {
+                em.remove(employee);
+                em.getTransaction().commit();
+                return true;
+            }
+
+            em.getTransaction().commit();
+            return false;
+        } catch (RuntimeException ex) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw ex;
+        } finally {
+            em.close();
+        }
+    }
 }

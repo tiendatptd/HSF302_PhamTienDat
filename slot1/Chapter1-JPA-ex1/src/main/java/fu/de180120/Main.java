@@ -43,5 +43,28 @@ public class Main {
         for (Employee e : employees) {
             System.out.println(" - " + e);
         }
+
+        // TODO 0.5:
+        Employee e1 = new Employee();
+        e1.setFullName("Tran Van C");
+        e1.setEmail("c.tran@fpt.edu.vn");
+        e1.setSalary(new BigDecimal("20000000"));
+        e1.setGender(Gender.MALE);
+        e1.setHireDate(LocalDate.now());
+        e1.setActive(true);
+        dao.save(e1);
+
+        // 2. Test findByEmail - TON TAI
+        Employee found = dao.findByEmail("c.tran@fpt.edu.vn");
+        System.out.println("Tim theo email (co ket qua): " + found);
+
+        // 3. Test findByEmail - KHONG TON TAI
+        Employee notFoundEmail = dao.findByEmail("notfound@fpt.edu.vn");
+        System.out.println("Tim theo email (khong co ket qua): " + notFoundEmail);
+
+        // 4. Test findBySalaryGreaterThanAndActive
+        List<Employee> highSalaryEmps = dao.findBySalaryGreaterThanAndActive(new BigDecimal("10000000"));
+        System.out.println("Danh sach nhan vien luong > 10M (" + highSalaryEmps.size() + " nhan vien):");
+        highSalaryEmps.forEach(System.out::println);
     }
 }

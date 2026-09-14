@@ -38,7 +38,7 @@ public class Employee {
 
     @Transient
     private int yearsOfService;
-    
+
     public int getYearsOfService() {
         if (this.hireDate != null) {
             return Period.between(this.hireDate, LocalDate.now()).getYears();

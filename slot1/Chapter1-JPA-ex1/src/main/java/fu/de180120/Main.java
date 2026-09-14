@@ -45,14 +45,14 @@ public class Main {
         }
 
         // TODO 0.5:
-        Employee e1 = new Employee();
-        e1.setFullName("Tran Van C");
-        e1.setEmail("c.tran@fpt.edu.vn");
-        e1.setSalary(new BigDecimal("20000000"));
-        e1.setGender(Gender.MALE);
-        e1.setHireDate(LocalDate.now());
-        e1.setActive(true);
-        dao.save(e1);
+//        Employee e1 = new Employee();
+//        e1.setFullName("Tran Van C");
+//        e1.setEmail("c.tran@fpt.edu.vn");
+//        e1.setSalary(new BigDecimal("20000000"));
+//        e1.setGender(Gender.MALE);
+//        e1.setHireDate(LocalDate.now());
+//        e1.setActive(true);
+//        dao.save(e1);
 
         // 2. Test findByEmail - TON TAI
         Employee found = dao.findByEmail("c.tran@fpt.edu.vn");
@@ -66,5 +66,26 @@ public class Main {
         List<Employee> highSalaryEmps = dao.findBySalaryGreaterThanAndActive(new BigDecimal("10000000"));
         System.out.println("Danh sach nhan vien luong > 10M (" + highSalaryEmps.size() + " nhan vien):");
         highSalaryEmps.forEach(System.out::println);
+
+        //TODO 0.6: UPDATE
+        System.out.println("\n=== KIEM THU TODO 0.6 (UPDATE: merge) ===");
+        Employee empToUpdate = dao.findById(1L);
+        if (empToUpdate != null) {
+            System.out.println("Truoc khi update: " + empToUpdate);
+
+            // Tang luong them 5,000,000
+            BigDecimal oldSalary = empToUpdate.getSalary();
+            BigDecimal newSalary = oldSalary.add(new BigDecimal("10000000.00"));
+            empToUpdate.setSalary(newSalary);
+
+            // Goi dao.update (merge object Detached)
+            dao.update(empToUpdate);
+
+            // Fetch lai tu DB de kiem tra gia tri da thuc su duoc luu hay chua
+            Employee updatedEmp = dao.findById(1L);
+            System.out.println("Sau khi update (Salary moi: " + updatedEmp.getSalary() + "): " + updatedEmp);
+        } else {
+            System.out.println("Khong tim thay nhan vien ID = 1 de update.");
+        }
     }
 }

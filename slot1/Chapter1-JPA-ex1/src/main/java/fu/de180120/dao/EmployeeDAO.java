@@ -75,4 +75,24 @@ public class EmployeeDAO {
             em.close();
         }
     }
+
+    public Employee update(Employee e) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            // Dung em.merge(e) de re-attach entity va cap nhat vao DB
+            Employee mergedEntity = em.merge(e);
+
+            em.getTransaction().commit();
+            return mergedEntity;
+        } catch (RuntimeException ex) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw ex;
+        } finally {
+            em.close();
+        }
+    }
 }

@@ -6,105 +6,84 @@ import fu.de180120.pojo.Gender;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         EmployeeDAO dao = new EmployeeDAO();
-//
-//        Employee emp = new Employee();
-//        emp.setFullName("Nguyen Van A");
-//        emp.setEmail("a.nguyen@fpt.edu.vn");
-//        emp.setSalary(new BigDecimal("15000000.00"));
-//        emp.setGender(Gender.MALE);
-//        emp.setHireDate(LocalDate.of(2023, 5, 15));
-//        emp.setActive(true);
-//        System.out.println("Truoc khi save - ID: " + emp.getId());
-//        dao.save(emp);
-//        System.out.println("Sau khi save - ID: " + emp.getId());
-//        System.out.println("Thong tin nhan vien: " + emp);
 
-        System.out.println("=== KIEM THU findById ===");
-        Employee foundEmp = dao.findById(1L);
-        if (foundEmp != null) {
-            System.out.println("Tim thấy nhan vien: " + foundEmp);
+        System.out.println("=========================================");
+        System.out.println("      DEMO LUONG CRUD DAY DU             ");
+        System.out.println("=========================================");
+
+        String testEmail = "d.le@fpt.edu.vn";
+
+        // Dọn dẹp dữ liệu cũ nếu email trùng từ trước (đảm bảo demo luôn chạy mượt)
+        Employee oldEmp = dao.findByEmail(testEmail);
+        if (oldEmp != null) {
+            dao.delete(oldEmp.getId());
+        }
+
+        // ---------------------------------------------------------------------
+        // STEP 1: CREATE (Tạo mới nhân viên)
+        // ---------------------------------------------------------------------
+        System.out.println("\n--- 1. CREATE ---");
+        Employee newEmp = new Employee();
+        newEmp.setFullName("Le Van D");
+        newEmp.setEmail(testEmail);
+        newEmp.setSalary(new BigDecimal("12000000.00"));
+        newEmp.setGender(Gender.FEMALE);
+        newEmp.setHireDate(LocalDate.now());
+        newEmp.setActive(true);
+
+        System.out.println("Truoc khi save - ID: " + newEmp.getId());
+        dao.save(newEmp);
+        Long createdId = newEmp.getId();
+        System.out.println("Sau khi save   - Generated ID: " + createdId);
+
+        // ---------------------------------------------------------------------
+        // STEP 2: READ (Đọc dữ liệu vừa tạo theo ID)
+        // ---------------------------------------------------------------------
+        System.out.println("\n--- 2. READ (Sau khi CREATE) ---");
+        Employee readEmp1 = dao.findById(createdId);
+        System.out.println("Thong tin Nhan vien vua tao: " + readEmp1);
+
+        // ---------------------------------------------------------------------
+        // STEP 3: UPDATE (Cập nhật thông tin nhân viên)
+        // ---------------------------------------------------------------------
+        System.out.println("\n--- 3. UPDATE ---");
+        readEmp1.setSalary(new BigDecimal("18000000.00"));
+        readEmp1.setFullName("Le Van D (Updated)");
+
+        dao.update(readEmp1);
+        System.out.println("Da goi dao.update() voi Salary va FullName moi.");
+
+        // ---------------------------------------------------------------------
+        // STEP 4: READ AGAIN (Kiểm tra dữ liệu sau Update)
+        // ---------------------------------------------------------------------
+        System.out.println("\n--- 4. READ (Sau khi UPDATE) ---");
+        Employee readEmp2 = dao.findById(createdId);
+        System.out.println("Thong tin Nhan vien sau Update: " + readEmp2);
+
+        // ---------------------------------------------------------------------
+        // STEP 5: DELETE (Xóa nhân viên theo ID)
+        // ---------------------------------------------------------------------
+        System.out.println("\n--- 5. DELETE ---");
+        boolean isDeleted = dao.delete(createdId);
+        System.out.println("Ket qua xoa ID " + createdId + ": " + isDeleted);
+
+        // ---------------------------------------------------------------------
+        // STEP 6: READ AGAIN (Xác nhận dữ liệu đã được xóa hoàn toàn)
+        // ---------------------------------------------------------------------
+        System.out.println("\n--- 6. READ (Sau khi DELETE) ---");
+        Employee readEmp3 = dao.findById(createdId);
+        if (readEmp3 == null) {
+            System.out.println("Xac nhan: Khong tim thay Nhan vien voi ID = " + createdId + " (Gia tri tra ve null)");
         } else {
-            System.out.println("Khong tim thay nhan vien voi ID = 1");
+            System.out.println("Loi: Nhan vien van con ton tai trong CSDL!");
         }
 
-        // 2. Kiem thu findById voi ID KHONG ton tai (vi dụ 9999L)
-        Employee notFound = dao.findById(9999L);
-        System.out.println("Tim voi ID 9999: " + notFound); // Ket qua ky vong: null
-
-        // 3. Kiem thu findAll
-        System.out.println("\n=== KIEM THU findAll ===");
-        List<Employee> employees = dao.findAll();
-        System.out.println("Tong so nhan vien trong DB: " + employees.size());
-        for (Employee e : employees) {
-            System.out.println(" - " + e);
-        }
-
-        // TODO 0.5:
-//        Employee e1 = new Employee();
-//        e1.setFullName("Tran Van C");
-//        e1.setEmail("c.tran@fpt.edu.vn");
-//        e1.setSalary(new BigDecimal("20000000"));
-//        e1.setGender(Gender.MALE);
-//        e1.setHireDate(LocalDate.now());
-//        e1.setActive(true);
-//        dao.save(e1);
-
-        // 2. Test findByEmail - TON TAI
-        Employee found = dao.findByEmail("c.tran@fpt.edu.vn");
-        System.out.println("Tim theo email (co ket qua): " + found);
-
-        // 3. Test findByEmail - KHONG TON TAI
-        Employee notFoundEmail = dao.findByEmail("notfound@fpt.edu.vn");
-        System.out.println("Tim theo email (khong co ket qua): " + notFoundEmail);
-
-        // 4. Test findBySalaryGreaterThanAndActive
-        List<Employee> highSalaryEmps = dao.findBySalaryGreaterThanAndActive(new BigDecimal("10000000"));
-        System.out.println("Danh sach nhan vien luong > 10M (" + highSalaryEmps.size() + " nhan vien):");
-        highSalaryEmps.forEach(System.out::println);
-
-        //TODO 0.6: UPDATE
-        System.out.println("\n=== KIEM THU TODO 0.6 (UPDATE: merge) ===");
-        Employee empToUpdate = dao.findById(1L);
-        if (empToUpdate != null) {
-            System.out.println("Truoc khi update: " + empToUpdate);
-
-            // Tang luong them 5,000,000
-            BigDecimal oldSalary = empToUpdate.getSalary();
-            BigDecimal newSalary = oldSalary.add(new BigDecimal("10000000.00"));
-            empToUpdate.setSalary(newSalary);
-
-            // Goi dao.update (merge object Detached)
-            dao.update(empToUpdate);
-
-            // Fetch lai tu DB de kiem tra gia tri da thuc su duoc luu hay chua
-            Employee updatedEmp = dao.findById(1L);
-            System.out.println("Sau khi update (Salary moi: " + updatedEmp.getSalary() + "): " + updatedEmp);
-        } else {
-            System.out.println("Khong tim thay nhan vien ID = 1 de update.");
-        }
-
-        // TODO 0.7: DELETE
-        System.out.println("\n=== KIEM THU TODO 0.7 (DELETE: remove) ===");
-        Long deleteId = 3L; // Chọn ID của nhân viên Tran Van C để xóa
-
-        Employee empToDelete = dao.findById(deleteId);
-        if (empToDelete != null) {
-            System.out.println("Tim thay nhan vien can xoa: " + empToDelete);
-
-            // Goi hàm delete
-            boolean isDeleted = dao.delete(deleteId);
-            System.out.println("Ket qua xoa ID " + deleteId + ": " + isDeleted);
-
-            // Fetch lai tu DB de kiem tra: findById phai tra ve null
-            Employee checkDeleted = dao.findById(deleteId);
-            System.out.println("Kiem tra findById(" + deleteId + ") sau khi xoa: " + checkDeleted);
-        } else {
-            System.out.println("Khong tim thay nhan vien ID = " + deleteId + " de xoa.");
-        }
+        System.out.println("\n=========================================");
+        System.out.println("      HOAN THANH DEMO LUONG CRUD         ");
+        System.out.println("=========================================");
     }
 }

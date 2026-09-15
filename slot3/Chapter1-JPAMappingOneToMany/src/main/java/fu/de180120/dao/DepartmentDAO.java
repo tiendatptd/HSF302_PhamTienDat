@@ -93,4 +93,17 @@ public class DepartmentDAO {
             em.close(); // Đã đóng EM nhưng danh sách employees vẫn được load sẵn
         }
     }
+
+    // TODO 2.9
+    public List<Department> findAllWithEmployees() {
+        EntityManager em = JPAUtil.getEMF().createEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT DISTINCT d FROM Department d JOIN FETCH d.employees",
+                    Department.class
+            ).getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

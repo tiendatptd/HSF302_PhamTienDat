@@ -8,7 +8,6 @@ import java.time.LocalDate;
 @Table(name = "employees")
 public class Employee {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,8 +31,9 @@ public class Employee {
     @Column(name = "active")
     private boolean active;
 
+    // TODO 2.2: Owning side - giữ khóa ngoại department_id, nullable = false
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     public Employee() {

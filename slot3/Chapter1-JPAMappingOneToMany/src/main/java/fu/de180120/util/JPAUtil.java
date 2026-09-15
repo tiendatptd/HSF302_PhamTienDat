@@ -4,19 +4,20 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class JPAUtil {
-    private static final String PERSISTENCE_UNIT_NAME = "hsf302FU";
-    private static EntityManagerFactory factory;
 
-    public static EntityManagerFactory getEntityManagerFactory() {
-        if (factory == null || !factory.isOpen()) {
-            factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        }
-        return factory;
+    private static final EntityManagerFactory EMF =
+            Persistence.createEntityManagerFactory("hsf302FU");
+
+    private JPAUtil() {
     }
 
-    public static void shutdown() {
-        if (factory != null && factory.isOpen()) {
-            factory.close();
+    public static EntityManagerFactory getEMF() {
+        return EMF;
+    }
+
+    public static void close() {
+        if (EMF != null && EMF.isOpen()) {
+            EMF.close();
         }
     }
 }

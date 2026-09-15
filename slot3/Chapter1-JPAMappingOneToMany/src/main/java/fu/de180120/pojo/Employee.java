@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Table(name = "employees")
 public class Employee {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,9 +30,8 @@ public class Employee {
     private Gender gender;
 
     @Column(name = "active")
-    private Boolean active;
+    private boolean active;
 
-    // Owning side: Giữ khóa ngoại department_id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
@@ -39,7 +39,6 @@ public class Employee {
     public Employee() {
     }
 
-    // Getters & Setters
     public Long getId() {
         return id;
     }
@@ -88,11 +87,11 @@ public class Employee {
         this.gender = gender;
     }
 
-    public Boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 

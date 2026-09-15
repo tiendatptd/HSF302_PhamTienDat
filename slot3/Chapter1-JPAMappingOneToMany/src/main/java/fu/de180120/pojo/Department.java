@@ -8,17 +8,17 @@ import java.util.List;
 @Table(name = "departments")
 public class Department {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "location")
     private String location;
 
-    // Quan hệ 1-N: Department không phải Owning side
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Employee> employees = new ArrayList<>();
 
@@ -30,7 +30,6 @@ public class Department {
         this.location = location;
     }
 
-    // Getters & Setters
     public Long getId() {
         return id;
     }

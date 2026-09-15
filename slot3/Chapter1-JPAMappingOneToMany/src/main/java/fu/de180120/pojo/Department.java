@@ -8,7 +8,6 @@ import java.util.List;
 @Table(name = "departments")
 public class Department {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +18,8 @@ public class Department {
     @Column(name = "location")
     private String location;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // TODO 2.3: Inverse side - mappedBy khớp tên field ở Employee, cascade ALL, orphanRemoval true
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Employee> employees = new ArrayList<>();
 
     public Department() {

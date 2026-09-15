@@ -31,12 +31,20 @@ public class Employee {
     @Column(name = "active")
     private boolean active;
 
-    // TODO 2.2: Owning side - giữ khóa ngoại department_id, nullable = false
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     public Employee() {
+    }
+
+    public Employee(String email, String fullName, Gender gender, BigDecimal salary, LocalDate hireDate) {
+        this.email = email;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.salary = salary;
+        this.hireDate = hireDate;
+        this.active = true;
     }
 
     public Long getId() {

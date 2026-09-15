@@ -18,7 +18,6 @@ public class Department {
     @Column(name = "location")
     private String location;
 
-    // TODO 2.3: Inverse side - mappedBy khớp tên field ở Employee, cascade ALL, orphanRemoval true
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Employee> employees = new ArrayList<>();
 
@@ -28,6 +27,17 @@ public class Department {
     public Department(String name, String location) {
         this.name = name;
         this.location = location;
+    }
+
+    // TODO 2.4: Helper methods đồng bộ 2 chiều
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+        employee.setDepartment(this);
+    }
+
+    public void removeEmployee(Employee employee) {
+        this.employees.remove(employee);
+        employee.setDepartment(null);
     }
 
     public Long getId() {

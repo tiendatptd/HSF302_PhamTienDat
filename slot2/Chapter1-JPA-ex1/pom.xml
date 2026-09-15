@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+<!--     phiên dịch convert", biến thao tác Java thành câu lệnh SQL Server và ngược lại.-->
     <dependencies>
         <!-- Hibernate Core dependency for JPA implementation -->
         <dependency>
@@ -21,7 +22,7 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.5.2.Final</version>
         </dependency>
-
+<!--kết nối kỹ thuật giúp Java truyền/nhận dữ liệu trực tiếp với SQL Server qua cổng 1433.-->
         <!-- MSSQL JDBC Driver -->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
@@ -29,14 +30,14 @@
             <version>12.6.1.jre11</version>
             <scope>compile</scope>
         </dependency>
-
+<!--        Chứa các Interface và Annotation (@Entity, @Id, EntityManager) định nghĩa luật chơi ORM.-->
         <!-- Jakarta Persistence API -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.1.0</version>
         </dependency>
-
+<!--        Tự động sinh getter, setter, constructor, toString để diệt sạch code thủ tục (boilerplate)-->
         <!-- Lombok dependency for reducing boilerplate code -->
         <dependency>
             <groupId>org.projectlombok</groupId>

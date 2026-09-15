@@ -14,20 +14,20 @@ public class EmployeeDAO {
             Persistence.createEntityManagerFactory("hsf302FU");
 
     public void save(Employee e) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = emf.createEntityManager(); // tạo object quản lí các entity
         try {
-            em.getTransaction().begin();
+            em.getTransaction().begin(); // khi có thay đổi trong db
 
-            em.persist(e);
+            em.persist(e); // thêm student
 
-            em.getTransaction().commit();
+            em.getTransaction().commit(); //add
         } catch (RuntimeException ex) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
             throw ex;
         } finally {
-            em.close();
+            em.close(); // đóng
         }
     }
 

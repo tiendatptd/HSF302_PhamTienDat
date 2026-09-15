@@ -29,13 +29,20 @@ public class Main {
         System.out.println("\n--- 1. CREATE ---");
 
 // [LIFECYCLE]: NEW / TRANSIENT (Mới tạo bằng new, ID = null, chưa có trong DB/EM)
-        Employee newEmp = new Employee();
-        newEmp.setFullName("Le Van D");
-        newEmp.setEmail(testEmail);
-        newEmp.setSalary(new BigDecimal("12000000.00"));
-        newEmp.setGender(Gender.FEMALE);
-        newEmp.setHireDate(LocalDate.now());
-        newEmp.setActive(true);
+//        Employee newEmp = new Employee();
+//        newEmp.setFullName("Le Van D");
+//        newEmp.setEmail(testEmail);
+//        newEmp.setSalary(new BigDecimal("12000000.00"));
+//        newEmp.setGender(Gender.FEMALE);
+//        newEmp.setHireDate(LocalDate.now());
+//        newEmp.setActive(true);
+        Employee newEmp = new Employee(
+                "Le Van D",
+                "testEmail@gmail.com",
+                new BigDecimal("12000000.00"), // Truyền BigDecimal thay vì double
+                Gender.FEMALE,
+                LocalDate.now(),
+                true);
 
         System.out.println("Truoc khi save - ID: " + newEmp.getId());
 
@@ -107,7 +114,7 @@ public class Main {
 
         // 1. Tạo và save Employee thứ nhất (Kỳ vọng: THÀNH CÔNG)
         Employee emp1 = new Employee();
-        emp1.setFullName("Nguyen Van Copy 1");
+        emp1.setFullName("Nguyen Van C 1");
         emp1.setEmail(duplicateEmail);
         emp1.setSalary(new BigDecimal("10000000.00"));
         emp1.setGender(Gender.MALE);
@@ -119,12 +126,21 @@ public class Main {
 
         // 2. Cố ý tạo Employee thứ hai trùng email và gọi save()
         Employee emp2 = new Employee();
-        emp2.setFullName("Nguyen Van Copy 2");
+        emp2.setFullName("Nguyen Van C 2");
         emp2.setEmail(duplicateEmail); // Trùng email với emp1
         emp2.setSalary(new BigDecimal("12000000.00"));
         emp2.setGender(Gender.FEMALE);
         emp2.setHireDate(LocalDate.now());
         emp2.setActive(true);
+
+        Employee emp3 = new Employee();
+        emp3.setFullName("Nguyen Van C 3");
+        emp3.setEmail("ss@gmail.com");
+        emp3.setSalary(new BigDecimal("10000000.00"));
+        emp3.setGender(Gender.MALE);
+        emp3.setHireDate(LocalDate.now());
+        emp3.setActive(true);
+        dao.save(emp3);
 
         System.out.println("\n2. Co y luu Nhan vien 2 voi EMAIL TRUNG...");
 
@@ -138,10 +154,10 @@ public class Main {
             System.out.println("-> PASSED: Da bat duoc Exception: " + ex.getMessage());
         } finally {
             // 3. Dọn dẹp bản ghi thử nghiệm sau khi test xong
-            if (emp1.getId() != null) {
-                dao.delete(emp1.getId());
-                System.out.println("\n3. Da don dep du lieu test (Xoa ID " + emp1.getId() + ")");
-            }
+//            if (emp1.getId() != null) {
+//                dao.delete(emp1.getId());
+//                System.out.println("\n3. Da don dep du lieu test (Xoa ID " + emp1.getId() + ")");
+//            }
         }
     }
 }

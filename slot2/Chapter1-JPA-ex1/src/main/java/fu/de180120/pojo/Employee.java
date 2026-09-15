@@ -20,13 +20,13 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name ="fullName", columnDefinition = "NVARCHAR(50)", nullable = false)
     private String fullName;
 
-    @Column(unique = true)
+    @Column(name = "email", columnDefinition = "NVARCHAR(50)",nullable = false ,unique = true)
     private String email;
 
-    @Column(precision = 10, scale = 2)
+    @Column(name = "salary", precision = 10, scale = 2)
     private BigDecimal salary;
 
     @Enumerated(EnumType.STRING)
@@ -44,5 +44,14 @@ public class Employee {
             return Period.between(this.hireDate, LocalDate.now()).getYears();
         }
         return 0;
+    }
+
+    public Employee(String fullName, String email, BigDecimal salary, Gender gender, LocalDate hireDate, boolean active) {
+        this.fullName = fullName;
+        this.email = email;
+        this.salary = salary;
+        this.gender = gender;
+        this.hireDate = hireDate;
+        this.active = active;
     }
 }

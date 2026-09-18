@@ -1,42 +1,8 @@
-//package fu.de180120;
-//
-//import fu.de180120.dao.DepartmentDAO;
-//import fu.de180120.pojo.Department;
-//import fu.de180120.pojo.Employee;
-//import fu.de180120.pojo.Gender;
-//import fu.de180120.util.JPAUtil;
-//
-//import java.math.BigDecimal;
-//import java.time.LocalDate;
-//import java.util.List;
-//public class Main {
-//    public static void main(String[] args) {
-//        DepartmentDAO departmentDAO = new DepartmentDAO();
-//
-//        Department d1 = new Department("IT", "Building A");
-//        d1.addEmployee(new Employee("a@company.com", "Nguyen A", Gender.MALE, new BigDecimal("1000"), LocalDate.now()));
-//        departmentDAO.save(d1);
-//
-//        Department d2 = new Department("HR", "Building B");
-//        d2.addEmployee(new Employee("b@company.com", "Tran B", Gender.FEMALE, new BigDecimal("1200"), LocalDate.now()));
-//        departmentDAO.save(d2);
-//
-//        System.out.println("\n=== BẮT ĐẦU FIX N+1 QUERY BẰNG JOIN FETCH ===");
-//
-//        List<Department> departments = departmentDAO.findAllWithEmployees();
-//
-//        for (Department dept : departments) {
-//            System.out.println("Phòng ban: " + dept.getName()
-//                    + " | Số nhân viên: " + dept.getEmployees().size());
-//        }
-//
-//        JPAUtil.close();
-//    }
-//}
-
 package fu.de180120;
 
 import fu.de180120.dao.DepartmentDAO;
+import fu.de180120.dao.EmployeeDAO;
+import fu.de180120.dao.ProjectDAO;
 import fu.de180120.pojo.Department;
 import fu.de180120.pojo.Employee;
 import fu.de180120.pojo.Gender;
@@ -51,109 +17,180 @@ public class Main {
     public static void main(String[] args) {
 
         DepartmentDAO departmentDAO = new DepartmentDAO();
+        EmployeeDAO employeeDAO = new EmployeeDAO();
+        ProjectDAO projectDAO = new ProjectDAO();
 
         // =========================
-        // 1. TẠO PROJECT
+        // 1. TẠO DEPARTMENT
         // =========================
 
-        Project p1 = new Project(
-                "PRJ001",
-                "Online Job Portal",
-                new BigDecimal("50000"),
-                LocalDate.now(),
-                null
-        );
-
-        Project p2 = new Project(
-                "PRJ002",
-                "AI Recruitment System",
-                new BigDecimal("80000"),
-                LocalDate.now(),
-                null
+        Department department = new Department(
+                "IT",
+                "Da Nang"
         );
 
         // =========================
-        // 2. TẠO EMPLOYEE
+        // 2. TẠO 3 EMPLOYEE
         // =========================
 
         Employee e1 = new Employee(
-                "a@company.com",
-                "Nguyen A",
+                "nv1@company.com",
+                "Nguyen Van A",
                 Gender.MALE,
-                new BigDecimal("1000"),
-                LocalDate.now()
+                new BigDecimal("1500"),
+                LocalDate.of(2024, 1, 15)
         );
 
         Employee e2 = new Employee(
-                "b@company.com",
-                "Tran B",
+                "nv2@company.com",
+                "Tran Thi B",
                 Gender.FEMALE,
-                new BigDecimal("1200"),
-                LocalDate.now()
+                new BigDecimal("1800"),
+                LocalDate.of(2023, 6, 10)
+        );
+
+        Employee e3 = new Employee(
+                "nv3@company.com",
+                "Le Van C",
+                Gender.OTHER,
+                new BigDecimal("2000"),
+                LocalDate.of(2022, 9, 20)
+        );
+
+        e1.setActive(true);
+        e2.setActive(true);
+        e3.setActive(true);
+
+        // =========================
+        // 3. GÁN EMPLOYEE VÀO DEPARTMENT
+        // =========================
+
+        department.addEmployee(e1);
+        department.addEmployee(e2);
+        department.addEmployee(e3);
+
+        // =========================
+        // 4. LƯU DEPARTMENT
+        // =========================
+
+        departmentDAO.save(department);
+
+        // =========================
+        // 5. LƯU 3 EMPLOYEE
+        // =========================
+
+        employeeDAO.save(e1);
+        employeeDAO.save(e2);
+        employeeDAO.save(e3);
+
+        // =========================
+        // 6. TẠO 2 PROJECT
+        // =========================
+
+        Project projectA = new Project(
+                "PRJ-A",
+                "Online Job Portal",
+                new BigDecimal("50000"),
+                LocalDate.of(2024, 1, 1),
+                null
+        );
+
+        Project projectB = new Project(
+                "PRJ-B",
+                "AI Recruitment System",
+                new BigDecimal("80000"),
+                LocalDate.of(2024, 2, 1),
+                null
         );
 
         // =========================
-        // 3. TEST MANY-TO-MANY
-        // Employee là owning side
+        // 7. LƯU 2 PROJECT
         // =========================
 
-        e1.getProjects().add(p1);
-        e1.getProjects().add(p2);
-
-        e2.getProjects().add(p1);
+        projectDAO.save(projectA);
+        projectDAO.save(projectB);
 
         // =========================
-        // 4. TẠO DEPARTMENT
+        // 8. PHÂN CÔNG CHÉO
+        //
+        // NV1 -> Project A + B
+        // NV2 -> Project B
+        // NV3 -> Project A
         // =========================
 
-        Department d1 = new Department("IT", "Building A");
+        employeeDAO.assignEmployeeToProject(
+                e1.getId(),
+                projectA.getId()
+        );
 
-        d1.addEmployee(e1);
-        d1.addEmployee(e2);
+        employeeDAO.assignEmployeeToProject(
+                e1.getId(),
+                projectB.getId()
+        );
+
+        employeeDAO.assignEmployeeToProject(
+                e2.getId(),
+                projectB.getId()
+        );
+
+        employeeDAO.assignEmployeeToProject(
+                e3.getId(),
+                projectA.getId()
+        );
 
         // =========================
-        // 5. SAVE
+        // 9. ĐỌC LẠI EMPLOYEE
         // =========================
 
-        departmentDAO.save(d1);
+        Employee employee1 =
+                employeeDAO.findByIdWithProjects(e1.getId());
+
+        Employee employee2 =
+                employeeDAO.findByIdWithProjects(e2.getId());
+
+        Employee employee3 =
+                employeeDAO.findByIdWithProjects(e3.getId());
 
         // =========================
-        // 6. KIỂM TRA EMPLOYEE
+        // 10. IN DANH SÁCH PROJECT
         // =========================
-
-        System.out.println("\n=== TEST EMPLOYEE - PROJECT ===");
-
-        System.out.println("Employee: " + e1.getFullName());
-        System.out.println("Projects: " + e1.getProjects().size());
-
-        for (Project project : e1.getProjects()) {
-            System.out.println(
-                    "  - " + project.getProjectCode()
-                            + " | " + project.getProjectName()
-            );
-        }
 
         System.out.println();
+        System.out.println("========================================");
+        System.out.println("   DANH SÁCH PROJECT CỦA NHÂN VIÊN");
+        System.out.println("========================================");
 
-        System.out.println("Employee: " + e2.getFullName());
-        System.out.println("Projects: " + e2.getProjects().size());
-
-        for (Project project : e2.getProjects()) {
-            System.out.println(
-                    "  - " + project.getProjectCode()
-                            + " | " + project.getProjectName()
-            );
-        }
+        printEmployeeProjects(employee1);
+        printEmployeeProjects(employee2);
+        printEmployeeProjects(employee3);
 
         // =========================
-        // 7. KIỂM TRA DATABASE
+        // 11. ĐÓNG JPA
         // =========================
-
-        System.out.println("\n=== KIỂM TRA QUAN HỆ N-N ===");
-        System.out.println("Employee A -> Project 1");
-        System.out.println("Employee A -> Project 2");
-        System.out.println("Employee B -> Project 1");
 
         JPAUtil.close();
+    }
+
+    private static void printEmployeeProjects(Employee employee) {
+
+        System.out.println();
+        System.out.println("Employee: " + employee.getFullName());
+        System.out.println("Email: " + employee.getEmail());
+        System.out.println("Salary: " + employee.getSalary());
+        System.out.println("Hire Date: " + employee.getHireDate());
+        System.out.println("Gender: " + employee.getGender());
+        System.out.println("Active: " + employee.isActive());
+
+        System.out.println("Projects:");
+
+        for (Project project : employee.getProjects()) {
+
+            System.out.println(
+                    "  - "
+                            + project.getProjectCode()
+                            + " | "
+                            + project.getProjectName()
+            );
+        }
     }
 }

@@ -129,4 +129,24 @@ public class EmployeeDAO {
             em.close();
         }
     }
+    public Employee findByIdWithProjects(Long id) {
+        EntityManager em = JPAUtil.getEMF().createEntityManager();
+
+        try {
+            return em.createQuery(
+                            "SELECT DISTINCT e FROM Employee e " +
+                                    "LEFT JOIN FETCH e.projects " +
+                                    "WHERE e.id = :id",
+                            Employee.class
+                    )
+                    .setParameter("id", id)
+                    .getSingleResult();
+
+        } catch (jakarta.persistence.NoResultException e) {
+            return null;
+
+        } finally {
+            em.close();
+        }
+    }
 }

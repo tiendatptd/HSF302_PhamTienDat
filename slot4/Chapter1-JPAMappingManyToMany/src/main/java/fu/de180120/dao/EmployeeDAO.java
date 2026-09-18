@@ -149,4 +149,42 @@ public class EmployeeDAO {
             em.close();
         }
     }
+    // TODO 5.9
+    public void unassignEmployeeFromProject(Long employeeId, Long projectId) {
+        EntityManager em = JPAUtil.getEMF().createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+
+            Employee employee = em.find(Employee.class, employeeId);
+            Project project = em.find(Project.class, projectId);
+
+            if (employee == null) {
+                throw new IllegalArgumentException(
+                        "Employee not found: " + employeeId
+                );
+            }
+
+            if (project == null) {
+                throw new IllegalArgumentException(
+                        "Project not found: " + projectId
+                );
+            }
+
+            employee.unassignFromProject(project);
+
+            tx.commit();
+
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+
+            e.printStackTrace();
+
+        } finally {
+            em.close();
+        }
+    }
 }

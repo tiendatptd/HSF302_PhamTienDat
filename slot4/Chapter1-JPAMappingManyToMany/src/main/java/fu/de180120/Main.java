@@ -8,6 +8,7 @@ import fu.de180120.pojo.Employee;
 import fu.de180120.pojo.Gender;
 import fu.de180120.pojo.Project;
 import fu.de180120.util.JPAUtil;
+import jakarta.persistence.EntityManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,18 +22,18 @@ public class Main {
         EmployeeDAO employeeDAO = new EmployeeDAO();
         ProjectDAO projectDAO = new ProjectDAO();
 
-        // =========================
+        // =====================================================
         // 1. TẠO DEPARTMENT
-        // =========================
+        // =====================================================
 
         Department department = new Department(
                 "IT",
                 "Da Nang"
         );
 
-        // =========================
+        // =====================================================
         // 2. TẠO 3 EMPLOYEE
-        // =========================
+        // =====================================================
 
         Employee e1 = new Employee(
                 "nv1@company.com",
@@ -62,31 +63,26 @@ public class Main {
         e2.setActive(true);
         e3.setActive(true);
 
-        // =========================
+        // =====================================================
         // 3. GÁN EMPLOYEE VÀO DEPARTMENT
-        // =========================
+        // =====================================================
 
         department.addEmployee(e1);
         department.addEmployee(e2);
         department.addEmployee(e3);
 
-        // =========================
+        // =====================================================
         // 4. LƯU DEPARTMENT
-        // =========================
+        //
+        // Department có cascade = ALL nên 3 Employee
+        // cũng được lưu tự động.
+        // =====================================================
 
         departmentDAO.save(department);
 
-        // =========================
-        // 5. LƯU 3 EMPLOYEE
-        // =========================
-
-        employeeDAO.save(e1);
-        employeeDAO.save(e2);
-        employeeDAO.save(e3);
-
-        // =========================
-        // 6. TẠO 2 PROJECT
-        // =========================
+        // =====================================================
+        // 5. TẠO 2 PROJECT
+        // =====================================================
 
         Project projectA = new Project(
                 "PRJ-A",
@@ -104,20 +100,20 @@ public class Main {
                 null
         );
 
-        // =========================
-        // 7. LƯU 2 PROJECT
-        // =========================
+        // =====================================================
+        // 6. LƯU PROJECT
+        // =====================================================
 
         projectDAO.save(projectA);
         projectDAO.save(projectB);
 
-        // =========================
-        // 8. PHÂN CÔNG CHÉO
+        // =====================================================
+        // 7. PHÂN CÔNG NHÂN VIÊN VÀO PROJECT
         //
         // NV1 -> Project A + B
         // NV2 -> Project B
         // NV3 -> Project A
-        // =========================
+        // =====================================================
 
         employeeDAO.assignEmployeeToProject(
                 e1.getId(),
@@ -139,9 +135,9 @@ public class Main {
                 projectA.getId()
         );
 
-        // =========================
-        // 9. ĐỌC LẠI EMPLOYEE
-        // =========================
+        // =====================================================
+        // 8. ĐỌC LẠI EMPLOYEE + PROJECT
+        // =====================================================
 
         Employee employee1 =
                 employeeDAO.findByIdWithProjects(e1.getId());
@@ -152,9 +148,9 @@ public class Main {
         Employee employee3 =
                 employeeDAO.findByIdWithProjects(e3.getId());
 
-        // =========================
-        // 10. IN DANH SÁCH PROJECT
-        // =========================
+        // =====================================================
+        // 9. IN DANH SÁCH PROJECT CỦA TỪNG EMPLOYEE
+        // =====================================================
 
         System.out.println();
         System.out.println("========================================");
@@ -165,13 +161,14 @@ public class Main {
         printEmployeeProjects(employee2);
         printEmployeeProjects(employee3);
 
-        // =========================
-        // 11. THỐNG KÊ ACTIVE EMPLOYEE / PROJECT
-        // =========================
+        // =====================================================
+        // 10. TODO 5.8
+        // THỐNG KÊ ACTIVE EMPLOYEE / PROJECT
+        // =====================================================
 
         System.out.println();
         System.out.println("========================================");
-        System.out.println("   THỐNG KÊ ACTIVE EMPLOYEE / PROJECT");
+        System.out.println("   TODO 5.8 - THỐNG KÊ PROJECT");
         System.out.println("========================================");
 
         List<Object[]> stats =
@@ -185,18 +182,124 @@ public class Main {
             BigDecimal totalSalary = (BigDecimal) row[3];
 
             System.out.println();
-            System.out.println("Project: " + projectCode);
-            System.out.println("Name: " + projectName);
-            System.out.println("Active employees: " + employeeCount);
-            System.out.println("Total salary: " + totalSalary);
+            System.out.println("Project Code: " + projectCode);
+            System.out.println("Project Name: " + projectName);
+            System.out.println("Active Employees: " + employeeCount);
+            System.out.println("Total Salary: " + totalSalary);
         }
 
-        // =========================
-        // 12. ĐÓNG JPA
-        // =========================
+        // =====================================================
+        // 11. TODO 5.9
+        // KIỂM TRA SỐ DÒNG employee_project TRƯỚC KHI GỠ
+        // =====================================================
+
+        long beforeCount = countEmployeeProject();
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("   TODO 5.9 - TRƯỚC KHI UNASSIGN");
+        System.out.println("========================================");
+
+        System.out.println(
+                "Số dòng employee_project trước khi gỡ: "
+                        + beforeCount
+        );
+
+        // =====================================================
+        // 12. GỠ NV1 KHỎI PROJECT A
+        //
+        // NV1 trước:
+        //   -> Project A
+        //   -> Project B
+        //
+        // Sau:
+        //   -> Project B
+        // =====================================================
+
+        employeeDAO.unassignEmployeeFromProject(
+                e1.getId(),
+                projectA.getId()
+        );
+
+        // =====================================================
+        // 13. KIỂM TRA SỐ DÒNG employee_project SAU KHI GỠ
+        // =====================================================
+
+        long afterCount = countEmployeeProject();
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("   TODO 5.9 - SAU KHI UNASSIGN");
+        System.out.println("========================================");
+
+        System.out.println(
+                "Số dòng employee_project sau khi gỡ: "
+                        + afterCount
+        );
+
+        System.out.println(
+                "Số dòng đã mất: "
+                        + (beforeCount - afterCount)
+        );
+
+        // =====================================================
+        // 14. ĐỌC LẠI NV1 SAU KHI UNASSIGN
+        // =====================================================
+
+        Employee employeeAfterUnassign =
+                employeeDAO.findByIdWithProjects(e1.getId());
+
+        // =====================================================
+        // 15. KIỂM TRA EMPLOYEE VÀ PROJECT GỐC
+        // =====================================================
+
+        Project projectAFromDB =
+                projectDAO.findById(projectA.getId());
+
+        Project projectBFromDB =
+                projectDAO.findById(projectB.getId());
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("   KIỂM TRA ENTITY GỐC");
+        System.out.println("========================================");
+
+        System.out.println(
+                "Employee NV1 còn tồn tại: "
+                        + (employeeAfterUnassign != null)
+        );
+
+        System.out.println(
+                "Project A còn tồn tại: "
+                        + (projectAFromDB != null)
+        );
+
+        System.out.println(
+                "Project B còn tồn tại: "
+                        + (projectBFromDB != null)
+        );
+
+        // =====================================================
+        // 16. IN PROJECT CỦA NV1 SAU KHI UNASSIGN
+        // =====================================================
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("   PROJECT CỦA NV1 SAU KHI UNASSIGN");
+        System.out.println("========================================");
+
+        printEmployeeProjects(employeeAfterUnassign);
+
+        // =====================================================
+        // 17. ĐÓNG JPA
+        // =====================================================
 
         JPAUtil.close();
     }
+
+    // =========================================================
+    // IN THÔNG TIN EMPLOYEE + PROJECT
+    // =========================================================
 
     private static void printEmployeeProjects(Employee employee) {
 
@@ -210,14 +313,44 @@ public class Main {
 
         System.out.println("Projects:");
 
-        for (Project project : employee.getProjects()) {
+        if (employee.getProjects().isEmpty()) {
 
-            System.out.println(
-                    "  - "
-                            + project.getProjectCode()
-                            + " | "
-                            + project.getProjectName()
-            );
+            System.out.println("  - Không có project");
+
+        } else {
+
+            for (Project project : employee.getProjects()) {
+
+                System.out.println(
+                        "  - "
+                                + project.getProjectCode()
+                                + " | "
+                                + project.getProjectName()
+                );
+            }
+        }
+    }
+
+    // =========================================================
+    // ĐẾM SỐ DÒNG TRONG employee_project
+    // =========================================================
+
+    private static long countEmployeeProject() {
+
+        EntityManager em =
+                JPAUtil.getEMF().createEntityManager();
+
+        try {
+
+            Number count = (Number) em.createNativeQuery(
+                    "SELECT COUNT(*) FROM employee_project"
+            ).getSingleResult();
+
+            return count.longValue();
+
+        } finally {
+
+            em.close();
         }
     }
 }

@@ -69,4 +69,14 @@ public class ProjectDAO {
             em.close();
         }
     }
+
+    public Project findById(Long id) {
+        EntityManager em = JPAUtil.getEMF().createEntityManager();
+
+        try {
+            return em.find(Project.class, id);
+        } finally {
+            em.close();
+        }
+    }
 }

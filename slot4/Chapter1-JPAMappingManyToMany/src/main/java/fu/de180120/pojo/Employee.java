@@ -17,7 +17,7 @@ public class Employee {
     @Column(name = "full_name", columnDefinition = "NVARCHAR(50)", nullable = false)
     private String fullName;
 
-    @Column(name = "salary", columnDefinition = "VARCHAR(20)")
+    @Column(name = "salary")
     private BigDecimal salary;
 
     @Column(name = "hire_date")

@@ -11,6 +11,7 @@ import fu.de180120.util.JPAUtil;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
 
@@ -165,7 +166,33 @@ public class Main {
         printEmployeeProjects(employee3);
 
         // =========================
-        // 11. ĐÓNG JPA
+        // 11. THỐNG KÊ ACTIVE EMPLOYEE / PROJECT
+        // =========================
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("   THỐNG KÊ ACTIVE EMPLOYEE / PROJECT");
+        System.out.println("========================================");
+
+        List<Object[]> stats =
+                projectDAO.getActiveEmployeeStatsByProject();
+
+        for (Object[] row : stats) {
+
+            String projectCode = (String) row[0];
+            String projectName = (String) row[1];
+            Long employeeCount = (Long) row[2];
+            BigDecimal totalSalary = (BigDecimal) row[3];
+
+            System.out.println();
+            System.out.println("Project: " + projectCode);
+            System.out.println("Name: " + projectName);
+            System.out.println("Active employees: " + employeeCount);
+            System.out.println("Total salary: " + totalSalary);
+        }
+
+        // =========================
+        // 12. ĐÓNG JPA
         // =========================
 
         JPAUtil.close();

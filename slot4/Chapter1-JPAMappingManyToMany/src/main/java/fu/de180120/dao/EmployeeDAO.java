@@ -1,6 +1,7 @@
 package fu.de180120.dao;
 
 import fu.de180120.pojo.Employee;
+import fu.de180120.pojo.Project;
 import fu.de180120.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -12,6 +13,7 @@ public class EmployeeDAO {
     public void save(Employee employee) {
         EntityManager em = JPAUtil.getEMF().createEntityManager();
         EntityTransaction tx = em.getTransaction();
+
         try {
             tx.begin();
             em.persist(employee);
@@ -26,6 +28,7 @@ public class EmployeeDAO {
 
     public Employee findById(Long id) {
         EntityManager em = JPAUtil.getEMF().createEntityManager();
+
         try {
             return em.find(Employee.class, id);
         } finally {
@@ -35,8 +38,12 @@ public class EmployeeDAO {
 
     public List<Employee> findAll() {
         EntityManager em = JPAUtil.getEMF().createEntityManager();
+
         try {
-            return em.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
+            return em.createQuery(
+                    "SELECT e FROM Employee e",
+                    Employee.class
+            ).getResultList();
         } finally {
             em.close();
         }
@@ -45,7 +52,9 @@ public class EmployeeDAO {
     public Employee update(Employee employee) {
         EntityManager em = JPAUtil.getEMF().createEntityManager();
         EntityTransaction tx = em.getTransaction();
+
         Employee updatedEmployee = null;
+
         try {
             tx.begin();
             updatedEmployee = em.merge(employee);
@@ -56,22 +65,66 @@ public class EmployeeDAO {
         } finally {
             em.close();
         }
+
         return updatedEmployee;
     }
 
     public void delete(Long id) {
         EntityManager em = JPAUtil.getEMF().createEntityManager();
         EntityTransaction tx = em.getTransaction();
+
         try {
             tx.begin();
+
             Employee employee = em.find(Employee.class, id);
+
             if (employee != null) {
                 em.remove(employee);
             }
+
             tx.commit();
         } catch (Exception e) {
             if (tx.isActive()) tx.rollback();
             e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
+
+    // TODO 5.6
+    public void assignEmployeeToProject(Long employeeId, Long projectId) {
+        EntityManager em = JPAUtil.getEMF().createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+
+            Employee employee = em.find(Employee.class, employeeId);
+            Project project = em.find(Project.class, projectId);
+
+            if (employee == null) {
+                throw new IllegalArgumentException(
+                        "Employee not found: " + employeeId
+                );
+            }
+
+            if (project == null) {
+                throw new IllegalArgumentException(
+                        "Project not found: " + projectId
+                );
+            }
+
+            employee.assignToProject(project);
+
+            tx.commit();
+
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+
+            e.printStackTrace();
+
         } finally {
             em.close();
         }

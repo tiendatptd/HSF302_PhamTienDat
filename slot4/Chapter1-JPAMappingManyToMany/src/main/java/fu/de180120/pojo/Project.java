@@ -99,7 +99,7 @@ public class Project {
     public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

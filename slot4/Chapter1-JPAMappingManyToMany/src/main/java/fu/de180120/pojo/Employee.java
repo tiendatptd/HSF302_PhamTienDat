@@ -131,6 +131,11 @@ public class Employee {
         this.projects = projects;
     }
 
+    public void assignToProject(Project p) {
+        this.projects.add(p);
+        p.getEmployees().add(this);
+    }
+
     @Override
     public String toString() {
         return "Employee{" +

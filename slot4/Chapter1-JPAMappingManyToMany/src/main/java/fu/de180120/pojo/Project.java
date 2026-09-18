@@ -29,6 +29,7 @@ public class Project {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    // Project là inverse side
     @ManyToMany(mappedBy = "projects")
     private Set<Employee> employees = new HashSet<>();
 

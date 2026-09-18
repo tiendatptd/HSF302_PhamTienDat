@@ -29,7 +29,6 @@ public class Project {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    // Project là inverse side
     @ManyToMany(mappedBy = "projects")
     private Set<Employee> employees = new HashSet<>();
 
@@ -99,5 +98,19 @@ public class Project {
 
     public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Project)) return false;
+
+        Project project = (Project) o;
+        return projectCode != null && projectCode.equals(project.projectCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return projectCode != null ? projectCode.hashCode() : 0;
     }
 }

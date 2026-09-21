@@ -73,9 +73,6 @@ public class Main {
 
         // =====================================================
         // 4. LƯU DEPARTMENT
-        //
-        // Department có cascade = ALL nên 3 Employee
-        // cũng được lưu tự động.
         // =====================================================
 
         departmentDAO.save(department);
@@ -109,10 +106,6 @@ public class Main {
 
         // =====================================================
         // 7. PHÂN CÔNG NHÂN VIÊN VÀO PROJECT
-        //
-        // NV1 -> Project A + B
-        // NV2 -> Project B
-        // NV3 -> Project A
         // =====================================================
 
         employeeDAO.assignEmployeeToProject(
@@ -163,8 +156,6 @@ public class Main {
 
         // =====================================================
         // 10. TODO 5.8
-        // THỐNG KÊ ACTIVE EMPLOYEE / PROJECT
-        // =====================================================
 
         System.out.println();
         System.out.println("========================================");
@@ -188,13 +179,9 @@ public class Main {
             System.out.println("Total Salary: " + totalSalary);
         }
 
-        // =====================================================
         // 11. TODO 5.10
         // TÌM ACTIVE EMPLOYEE THAM GIA > 1 PROJECT
-        //
-        // Phải chạy TODO 5.10 TRƯỚC TODO 5.9
-        // vì lúc này NV1 vẫn đang có Project A + B.
-        // =====================================================
+        //  TODO 5.11.
 
         System.out.println();
         System.out.println("========================================");
@@ -218,6 +205,7 @@ public class Main {
                 System.out.println("Employee: " + employee.getFullName());
                 System.out.println("Email: " + employee.getEmail());
                 System.out.println("Active: " + employee.isActive());
+
                 System.out.println(
                         "Number of Projects: "
                                 + employee.getProjects().size()
@@ -237,10 +225,89 @@ public class Main {
             }
         }
 
+        // 12. TODO 5.11
+
+        System.out.println();
+        System.out.println("========================================");
+        System.out.println("   TODO 5.11 - DEACTIVATE EMPLOYEE");
+        System.out.println("========================================");
+
+        System.out.println();
+        System.out.println("Trước khi deactivate NV1:");
+
+        Employee employeeBeforeDeactivate =
+                employeeDAO.findByIdWithProjects(e1.getId());
+
+        System.out.println(
+                "Employee: "
+                        + employeeBeforeDeactivate.getFullName()
+        );
+
+        System.out.println(
+                "Active: "
+                        + employeeBeforeDeactivate.isActive()
+        );
+
+        System.out.println(
+                "Number of Projects: "
+                        + employeeBeforeDeactivate.getProjects().size()
+        );
+
+        System.out.println("Projects:");
+
+        for (Project project : employeeBeforeDeactivate.getProjects()) {
+
+            System.out.println(
+                    "  - "
+                            + project.getProjectCode()
+                            + " | "
+                            + project.getProjectName()
+            );
+        }
+
+        // Thực hiện deactivate
+        employeeDAO.deactivateEmployee(e1.getId());
+
+        // Đọc lại từ database
+        Employee employeeAfterDeactivate =
+                employeeDAO.findByIdWithProjects(e1.getId());
+
+        System.out.println();
+        System.out.println("Sau khi deactivate NV1:");
+
+        System.out.println(
+                "Employee: "
+                        + employeeAfterDeactivate.getFullName()
+        );
+
+        System.out.println(
+                "Active: "
+                        + employeeAfterDeactivate.isActive()
+        );
+
+        System.out.println(
+                "Number of Projects: "
+                        + employeeAfterDeactivate.getProjects().size()
+        );
+
+        System.out.println("Projects vẫn còn:");
+
+        for (Project project : employeeAfterDeactivate.getProjects()) {
+
+            System.out.println(
+                    "  - "
+                            + project.getProjectCode()
+                            + " | "
+                            + project.getProjectName()
+            );
+        }
+
         // =====================================================
-        // 12. TODO 5.9
+        // 13. TODO 5.9
         // KIỂM TRA SỐ DÒNG employee_project TRƯỚC KHI GỠ
         // =====================================================
+        //
+        // TODO 5.11 chỉ deactivate NV1, không xóa quan hệ.
 
         long beforeCount = countEmployeeProject();
 
@@ -255,14 +322,7 @@ public class Main {
         );
 
         // =====================================================
-        // 13. GỠ NV1 KHỎI PROJECT A
-        //
-        // NV1 trước:
-        //   -> Project A
-        //   -> Project B
-        //
-        // Sau:
-        //   -> Project B
+        // 14. GỠ NV1 KHỎI PROJECT A
         // =====================================================
 
         employeeDAO.unassignEmployeeFromProject(
@@ -271,7 +331,7 @@ public class Main {
         );
 
         // =====================================================
-        // 14. KIỂM TRA SỐ DÒNG employee_project SAU KHI GỠ
+        // 15. KIỂM TRA SỐ DÒNG employee_project SAU KHI GỠ
         // =====================================================
 
         long afterCount = countEmployeeProject();
@@ -292,14 +352,14 @@ public class Main {
         );
 
         // =====================================================
-        // 15. ĐỌC LẠI NV1 SAU KHI UNASSIGN
+        // 16. ĐỌC LẠI NV1 SAU KHI UNASSIGN
         // =====================================================
 
         Employee employeeAfterUnassign =
                 employeeDAO.findByIdWithProjects(e1.getId());
 
         // =====================================================
-        // 16. KIỂM TRA EMPLOYEE VÀ PROJECT GỐC
+        // 17. KIỂM TRA EMPLOYEE VÀ PROJECT GỐC
         // =====================================================
 
         Project projectAFromDB =
@@ -328,9 +388,6 @@ public class Main {
                         + (projectBFromDB != null)
         );
 
-        // =====================================================
-        // 17. IN PROJECT CỦA NV1 SAU KHI UNASSIGN
-        // =====================================================
 
         System.out.println();
         System.out.println("========================================");
@@ -339,9 +396,6 @@ public class Main {
 
         printEmployeeProjects(employeeAfterUnassign);
 
-        // =====================================================
-        // 18. ĐÓNG JPA
-        // =====================================================
 
         JPAUtil.close();
     }

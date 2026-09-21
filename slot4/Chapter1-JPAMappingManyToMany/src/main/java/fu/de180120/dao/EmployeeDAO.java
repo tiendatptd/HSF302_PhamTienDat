@@ -216,4 +216,42 @@ public class EmployeeDAO {
             em.close();
         }
     }
+//todo 5.11
+    public void deactivateEmployee(Long employeeId) {
+
+        EntityManager em = JPAUtil.getEMF().createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+
+            tx.begin();
+
+            Employee employee = em.find(Employee.class, employeeId);
+
+            if (employee == null) {
+                throw new IllegalArgumentException(
+                        "Employee not found: " + employeeId
+                );
+            }
+
+            // Chỉ deactivate employee.
+            // Không xóa Employee.
+            // Không xóa các quan hệ employee_project.
+            employee.setActive(false);
+
+            tx.commit();
+
+        } catch (Exception e) {
+
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+
+            e.printStackTrace();
+
+        } finally {
+
+            em.close();
+        }
+    }
 }

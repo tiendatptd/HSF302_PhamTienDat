@@ -187,4 +187,33 @@ public class EmployeeDAO {
             em.close();
         }
     }
+
+    // TODO 5.10
+    public List<Employee> findActiveEmployeesWithMoreThanOneProject() {
+
+        EntityManager em = JPAUtil.getEMF().createEntityManager();
+
+        try {
+
+            return em.createQuery(
+                    "SELECT DISTINCT e " +
+                            "FROM Employee e " +
+                            "JOIN FETCH e.projects " +
+                            "WHERE e.active = true " +
+                            "AND e.id IN (" +
+                            "    SELECT e2.id " +
+                            "    FROM Employee e2 " +
+                            "    JOIN e2.projects p2 " +
+                            "    WHERE e2.active = true " +
+                            "    GROUP BY e2.id " +
+                            "    HAVING COUNT(p2) > 1" +
+                            ")",
+                    Employee.class
+            ).getResultList();
+
+        } finally {
+
+            em.close();
+        }
+    }
 }

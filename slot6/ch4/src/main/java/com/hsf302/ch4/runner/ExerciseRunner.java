@@ -60,7 +60,8 @@ public class ExerciseRunner implements CommandLineRunner {
         todo20();
         todo21();
         todo22();
-        /* todo20(); todo21(); todo22(); todo23(); */ }
+        todo23();
+        }
 
     // ===== helpers =====
     private void title(String t) {
@@ -244,5 +245,16 @@ public class ExerciseRunner implements CommandLineRunner {
         // Chuyển sinh viên ID = 2 (Tran Thi Binh) từ khoa SE sang khoa AI
         Student changed = studentService.changeDepartment(2L, "AI");
         System.out.println("Changed department successfully -> " + changed);
+    }
+
+    // ===== TODO 23 =====
+    private void todo23() {
+        title("TODO 23: Delete student & check stats");
+        // Xóa sinh viên ID = 3 (Le Van Cuong)
+        studentService.delete(3L);
+        System.out.println("Deleted student ID = 3 successfully");
+
+        // Kiểm tra lại thống kê khoa sau khi xóa
+        printList("Updated department statistics", departmentService.getStatistics());
     }
 }

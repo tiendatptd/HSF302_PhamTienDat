@@ -36,4 +36,5 @@ public interface StudentService {
     Student create(Student student, String deptCode);                       // TODO 20
     Student update(Long id, Student updatedInfo);                   // TODO 21
     Student changeDepartment(Long studentId, String newDeptCode);       // TODO 22
+    void delete(Long id);                                                   // TODO 23
 }

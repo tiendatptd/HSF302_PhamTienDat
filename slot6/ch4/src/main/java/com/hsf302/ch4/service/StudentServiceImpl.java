@@ -219,4 +219,19 @@ public class StudentServiceImpl implements StudentService {
 
         return studentRepository.save(student);
     }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sinh viên với ID: " + id));
+
+        // Gỡ bỏ quan hệ 2 chiều với Department trước khi xóa
+        if (student.getDepartment() != null) {
+            student.getDepartment().getStudents().remove(student);
+            student.setDepartment(null);
+        }
+
+        studentRepository.delete(student);
+    }
 }

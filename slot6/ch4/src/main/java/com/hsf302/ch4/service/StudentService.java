@@ -34,4 +34,5 @@ public interface StudentService {
     List<StudentSummary> getActiveSummaries();   // TODO 18
     Page<Student> findActiveByDepartment(String deptCode, int pageIndex, int size);   // TODO 19
     Student create(Student student, String deptCode);                       // TODO 20
+    Student update(Long id, Student updatedInfo);                   // TODO 21
 }

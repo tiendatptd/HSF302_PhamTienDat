@@ -169,4 +169,29 @@ public class StudentServiceImpl implements StudentService {
         dept.addStudent(student);   // Gán quan hệ 2 chiều
         return studentRepository.save(student);
     }
+
+    @Override
+    @Transactional
+    public Student update(Long id, Student updatedInfo) {
+        Student existing = studentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sinh viên với ID: " + id));
+
+        // Kiểm tra email mới nếu có thay đổi và khác rỗng
+        if (updatedInfo.getEmail() != null && !updatedInfo.getEmail().isBlank()
+                && !updatedInfo.getEmail().equals(existing.getEmail())) {
+            if (studentRepository.existsByEmail(updatedInfo.getEmail())) {
+                throw new IllegalArgumentException("Email đã tồn tại: " + updatedInfo.getEmail());
+            }
+            existing.setEmail(updatedInfo.getEmail());
+        }
+
+        existing.setFullName(updatedInfo.getFullName());
+        existing.setGender(updatedInfo.getGender());
+        existing.setDob(updatedInfo.getDob());
+        existing.setGpa(updatedInfo.getGpa());
+        existing.setActive(updatedInfo.isActive());
+
+        // Không cần gọi studentRepository.save() tường minh vì entity đang ở trạng thái managed (dirty checking)
+        return existing;
+    }
 }

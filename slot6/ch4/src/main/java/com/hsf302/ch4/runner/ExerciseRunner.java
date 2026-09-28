@@ -58,6 +58,7 @@ public class ExerciseRunner implements CommandLineRunner {
     private void bonus() { /* todo24(); */ }
     private void partE() {
         todo20();
+        todo21();
         /* todo20(); todo21(); todo22(); todo23(); */ }
 
     // ===== helpers =====
@@ -218,5 +219,21 @@ public class ExerciseRunner implements CommandLineRunner {
 
         Student saved = studentService.create(newSt, "SE");
         System.out.println("Created successfully -> " + saved);
+    }
+
+    // ===== TODO 21 =====
+    private void todo21() {
+        title("TODO 21: Update student");
+        // Lấy sinh viên ID = 1 (SE001 - Nguyen Van An) để cập nhật GPA và Email
+        Student info = new Student();
+        info.setFullName("Nguyen Van An (Updated)");
+        info.setEmail("an.nv.updated@fpt.edu.vn");
+        info.setGender(Gender.MALE);
+        info.setDob(LocalDate.of(2005, 3, 15));
+        info.setGpa(3.9);
+        info.setActive(true);
+
+        Student updated = studentService.update(1L, info);
+        System.out.println("Updated successfully -> " + updated);
     }
 }

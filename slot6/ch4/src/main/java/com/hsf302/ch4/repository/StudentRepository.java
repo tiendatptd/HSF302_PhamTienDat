@@ -59,4 +59,6 @@ public interface StudentRepository extends JpaRepository<Student, Long>,
 
     @Query("SELECT s FROM Student s WHERE s.department.code = :code AND s.active = true") // TODO 19
     Page<Student> findActiveByDepartment(@Param("code") String code, Pageable pageable);
+
+    boolean existsByStudentCode(String studentCode);                        // TODO 20
 }

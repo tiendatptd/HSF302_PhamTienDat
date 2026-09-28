@@ -56,7 +56,9 @@ public class ExerciseRunner implements CommandLineRunner {
         todo19();
          }
     private void bonus() { /* todo24(); */ }
-    private void partE() { /* todo20(); todo21(); todo22(); todo23(); */ }
+    private void partE() {
+        todo20();
+        /* todo20(); todo21(); todo22(); todo23(); */ }
 
     // ===== helpers =====
     private void title(String t) {
@@ -200,5 +202,21 @@ public class ExerciseRunner implements CommandLineRunner {
             System.out.println("   totalElements=" + page.getTotalElements()
                     + ", totalPages=" + page.getTotalPages());
         }
+    }
+
+    // ===== TODO 20 =====
+    private void todo20() {
+        title("TODO 20: Create new student");
+        Student newSt = new Student();
+        newSt.setStudentCode("SE005");
+        newSt.setFullName("Hoang Ngoc Ha");
+        newSt.setEmail("ha.hn@fpt.edu.vn");
+        newSt.setGender(Gender.FEMALE);
+        newSt.setDob(LocalDate.of(2005, 12, 25));
+        newSt.setGpa(3.7);
+        newSt.setActive(true);
+
+        Student saved = studentService.create(newSt, "SE");
+        System.out.println("Created successfully -> " + saved);
     }
 }

@@ -1,8 +1,10 @@
 package com.hsf302.ch4.service;
 
 import com.hsf302.ch4.dto.StudentSummary;
+import com.hsf302.ch4.pojo.Department;
 import com.hsf302.ch4.pojo.Gender;
 import com.hsf302.ch4.pojo.Student;
+import com.hsf302.ch4.repository.DepartmentRepository;
 import com.hsf302.ch4.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ import java.util.Optional;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public long count() {
@@ -148,5 +151,22 @@ public class StudentServiceImpl implements StudentService {
     public Page<Student> findActiveByDepartment(String deptCode, int pageIndex, int size) {
         Pageable pageable = PageRequest.of(pageIndex, size, Sort.by("gpa").descending());
         return studentRepository.findActiveByDepartment(deptCode, pageable);
+    }
+
+    @Override
+    @Transactional
+    public Student create(Student student, String deptCode) {
+        if (studentRepository.existsByStudentCode(student.getStudentCode())) {
+            throw new IllegalArgumentException("Mã sinh viên đã tồn tại: " + student.getStudentCode());
+        }
+        if (student.getEmail() != null && !student.getEmail().isBlank()
+                && studentRepository.existsByEmail(student.getEmail())) {
+            throw new IllegalArgumentException("Email đã tồn tại: " + student.getEmail());
+        }
+        Department dept = departmentRepository.findByCode(deptCode)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy khoa: " + deptCode));
+
+        dept.addStudent(student);   // Gán quan hệ 2 chiều
+        return studentRepository.save(student);
     }
 }

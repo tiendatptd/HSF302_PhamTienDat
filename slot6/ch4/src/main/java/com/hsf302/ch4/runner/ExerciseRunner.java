@@ -46,6 +46,7 @@ public class ExerciseRunner implements CommandLineRunner {
         todo12();
         todo13();
         todo14();
+        todo15();
         /* todo12(); todo13(); todo14(); todo15(); todo16(); todo17(); todo18(); todo19(); */ }
     private void bonus() { /* todo24(); */ }
     private void partE() { /* todo20(); todo21(); todo22(); todo23(); */ }
@@ -143,5 +144,11 @@ public class ExerciseRunner implements CommandLineRunner {
     private void todo14() {
         title("TODO 14: Statistics by department (DTO)");
         printList("code | name | total | avgGpa", departmentService.getStatistics());
+    }
+
+    // ===== TODO 15 =====
+    private void todo15() {
+        title("TODO 15: Subquery - GPA above average");
+        printList("GPA > AVG", studentService.findAboveAverageGpa());
     }
 }

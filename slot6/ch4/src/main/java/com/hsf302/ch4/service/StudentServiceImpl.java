@@ -194,4 +194,29 @@ public class StudentServiceImpl implements StudentService {
         // Không cần gọi studentRepository.save() tường minh vì entity đang ở trạng thái managed (dirty checking)
         return existing;
     }
+
+    @Override
+    @Transactional
+    public Student changeDepartment(Long studentId, String newDeptCode) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sinh viên với ID: " + studentId));
+
+        Department newDept = departmentRepository.findByCode(newDeptCode)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy khoa mới: " + newDeptCode));
+
+        // Nếu sinh viên đã thuộc khoa mới này rồi thì không cần làm gì thêm
+        if (student.getDepartment() != null && student.getDepartment().getCode().equals(newDeptCode)) {
+            return student;
+        }
+
+        // Xóa sinh viên khỏi danh sách khoa cũ (nếu có)
+        if (student.getDepartment() != null) {
+            student.getDepartment().getStudents().remove(student);
+        }
+
+        // Thêm sinh viên vào khoa mới thông qua hàm tiện ích 2 chiều
+        newDept.addStudent(student);
+
+        return studentRepository.save(student);
+    }
 }

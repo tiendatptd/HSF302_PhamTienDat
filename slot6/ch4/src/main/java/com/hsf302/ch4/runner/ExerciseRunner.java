@@ -59,6 +59,7 @@ public class ExerciseRunner implements CommandLineRunner {
     private void partE() {
         todo20();
         todo21();
+        todo22();
         /* todo20(); todo21(); todo22(); todo23(); */ }
 
     // ===== helpers =====
@@ -235,5 +236,13 @@ public class ExerciseRunner implements CommandLineRunner {
 
         Student updated = studentService.update(1L, info);
         System.out.println("Updated successfully -> " + updated);
+    }
+
+    // ===== TODO 22 =====
+    private void todo22() {
+        title("TODO 22: Change student department");
+        // Chuyển sinh viên ID = 2 (Tran Thi Binh) từ khoa SE sang khoa AI
+        Student changed = studentService.changeDepartment(2L, "AI");
+        System.out.println("Changed department successfully -> " + changed);
     }
 }

@@ -37,4 +37,5 @@ public interface StudentService {
     Student update(Long id, Student updatedInfo);                   // TODO 21
     Student changeDepartment(Long studentId, String newDeptCode);       // TODO 22
     void delete(Long id);                                                   // TODO 23
+    List<Student> searchDynamic(String keyword, String deptCode, Double minGpa, Boolean active); // TODO 24
 }

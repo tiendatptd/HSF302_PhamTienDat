@@ -55,13 +55,15 @@ public class ExerciseRunner implements CommandLineRunner {
         todo18();
         todo19();
          }
-    private void bonus() { /* todo24(); */ }
     private void partE() {
         todo20();
         todo21();
         todo22();
         todo23();
         }
+    private void bonus() {
+        todo24();
+    }
 
     // ===== helpers =====
     private void title(String t) {
@@ -256,5 +258,17 @@ public class ExerciseRunner implements CommandLineRunner {
 
         // Kiểm tra lại thống kê khoa sau khi xóa
         printList("Updated department statistics", departmentService.getStatistics());
+    }
+
+    // ===== TODO 24 (Bonus) =====
+    private void todo24() {
+        title("TODO 24: Dynamic Search with Specification");
+        // Lọc sinh viên: thuộc khoa SE, GPA >= 3.0, đang active
+        printList("Dynamic filter (SE, GPA>=3.0, active=true)",
+                studentService.searchDynamic(null, "SE", 3.0, true));
+
+        // Lọc sinh viên có chứa từ khóa 'an' hoặc 'binh'
+        printList("Dynamic filter (Keyword 'an')",
+                studentService.searchDynamic("an", null, null, null));
     }
 }

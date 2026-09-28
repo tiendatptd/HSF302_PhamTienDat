@@ -6,11 +6,13 @@ import com.hsf302.ch4.pojo.Gender;
 import com.hsf302.ch4.pojo.Student;
 import com.hsf302.ch4.repository.DepartmentRepository;
 import com.hsf302.ch4.repository.StudentRepository;
+import com.hsf302.ch4.specification.StudentSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -233,5 +235,15 @@ public class StudentServiceImpl implements StudentService {
         }
 
         studentRepository.delete(student);
+    }
+
+    @Override
+    public List<Student> searchDynamic(String keyword, String deptCode, Double minGpa, Boolean active) {
+        Specification<Student> spec = Specification.where(StudentSpecifications.hasKeyword(keyword))
+                .and(StudentSpecifications.hasDepartmentCode(deptCode))
+                .and(StudentSpecifications.gpaGreaterThanOrEqual(minGpa))
+                .and(StudentSpecifications.isActive(active));
+
+        return studentRepository.findAll(spec);
     }
 }

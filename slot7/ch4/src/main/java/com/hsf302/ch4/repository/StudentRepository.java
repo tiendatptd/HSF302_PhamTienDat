@@ -61,4 +61,9 @@ public interface StudentRepository extends JpaRepository<Student, Long>,
     Page<Student> findActiveByDepartment(@Param("code") String code, Pageable pageable);
 
     boolean existsByStudentCode(String studentCode);                        // TODO 20
+
+    // ===== Exercise 2 =====
+    List<Student> findByCourses_CodeOrderByFullNameAsc(String courseCode);
+    long countByCourses_Code(String courseCode);
+    List<Student> findByCourses_CodeAndActiveTrueOrderByFullNameAsc(String courseCode);
 }

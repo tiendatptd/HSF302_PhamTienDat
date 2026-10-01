@@ -9,4 +9,8 @@ public interface EnrollmentService {
     // ===== Part B =====
     List<Course> getCoursesOfStudent(String studentCode);
     List<Student> getStudentsOfCourse(String courseCode);
+    // ===== Part C =====
+    List<Student> findStudentsInCourse(String courseCode);
+    long countStudentsInCourse(String courseCode);
+    List<Student> findActiveStudentsInCourse(String courseCode);
 }

@@ -1,0 +1,8 @@
+package com.hsf302.ch4.repository;
+
+import com.hsf302.ch4.pojo.Course;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CourseRepository extends JpaRepository<Course, Long> {
+    // Sẽ bổ sung dần các hàm truy vấn từ TODO 7
+}

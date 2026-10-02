@@ -35,7 +35,7 @@ public class Exercise2Runner implements CommandLineRunner {
 //        partD();
 //        bonus();        // chạy trên dữ liệu gốc → trước Part E
 //        partE();
-        todo19();
+        todo20();
     }
 
     private void partB() {
@@ -59,7 +59,9 @@ public class Exercise2Runner implements CommandLineRunner {
         todo19();
         }
     private void bonus() { /* todo25(); */ }
-    private void partE() { /* todo20(); todo21(); todo22(); todo23(); todo24(); */ }
+    private void partE() {
+        todo20();
+        /* todo20(); todo21(); todo22(); todo23(); todo24(); */ }
 
     // ===== helpers =====
     private void title(String t) {
@@ -232,5 +234,21 @@ public class Exercise2Runner implements CommandLineRunner {
 
         System.out.println("Searching by probe: name='management', semester='SU26'");
         printList("QBE Result", courseService.searchByExample(probe));
+    }
+
+    // ===== TODO 20 =====
+    private void todo20() {
+        title("TODO 20: Bulk Update with @Modifying and @Transactional");
+
+        System.out.println("--- Before update (SU26) ---");
+        printList("SU26 courses", courseService.findBySemester("SU26"));
+
+        attempt("Increase capacity of SU26 courses by 5", () -> {
+            int updatedCount = courseService.increaseCapacity("SU26", 5);
+            System.out.println("   -> Affected rows: " + updatedCount);
+        });
+
+        System.out.println("--- After update (SU26) ---");
+        printList("SU26 courses", courseService.findBySemester("SU26"));
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -42,4 +43,9 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     // ===== Khai báo phân trang =====
     Page<Course> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
+
+    // ===== Part E — DML & Transaction =====
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Course c SET c.capacity = c.capacity + :bonus WHERE c.semester = :semester")
+    int increaseCapacityBySemester(@Param("semester") String semester, @Param("bonus") int bonus);
 }

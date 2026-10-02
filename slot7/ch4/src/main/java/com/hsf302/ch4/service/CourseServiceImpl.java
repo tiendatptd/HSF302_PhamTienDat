@@ -116,4 +116,14 @@ public class CourseServiceImpl implements CourseService {
         // findAll(Example) đã được JpaRepository hỗ trợ sẵn
         return courseRepository.findAll(example);
     }
+
+    // ===== Part E =====
+    @Override
+    @Transactional // Ghi đè cấu hình readOnly = true của class
+    public int increaseCapacity(String semester, int bonus) {
+        if (bonus <= 0) {
+            throw new IllegalArgumentException("Bonus capacity must be > 0");
+        }
+        return courseRepository.increaseCapacityBySemester(semester, bonus);
+    }
 }

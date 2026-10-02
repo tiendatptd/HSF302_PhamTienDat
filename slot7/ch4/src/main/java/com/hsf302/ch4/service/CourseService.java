@@ -24,4 +24,6 @@ public interface CourseService {
     List<CourseEnrollmentCount> findTopEnrolled(int n);
     Page<Course> searchCourses(String keyword, int page, int size);
     List<Course> searchByExample(Course probe);
+    // ===== Part E =====
+    int increaseCapacity(String semester, int bonus);
 }

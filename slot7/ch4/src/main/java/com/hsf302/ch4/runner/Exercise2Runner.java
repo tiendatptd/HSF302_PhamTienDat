@@ -35,7 +35,7 @@ public class Exercise2Runner implements CommandLineRunner {
 //        partD();
 //        bonus();        // chạy trên dữ liệu gốc → trước Part E
 //        partE();
-        todo21();
+        todo22();
     }
 
     private void partB() {
@@ -62,6 +62,7 @@ public class Exercise2Runner implements CommandLineRunner {
     private void partE() {
         todo20();
         todo21();
+        todo22();
         /* todo20(); todo21(); todo22(); todo23(); todo24(); */ }
 
     // ===== helpers =====
@@ -266,5 +267,22 @@ public class Exercise2Runner implements CommandLineRunner {
 
         System.out.println("--- After delete SE001 ---");
         System.out.println("SE001 enrolled in HSF302? " + enrollmentService.isEnrolled("SE001", "HSF302"));
+    }
+
+    // ===== TODO 22 =====
+    private void todo22() {
+        title("TODO 22: Delete Inverse Side (Course)");
+
+        System.out.println("--- Before delete SWP391 ---");
+        System.out.println("Total courses: " + courseService.count());
+        System.out.println("SE003 enrolled in SWP391? " + enrollmentService.isEnrolled("SE003", "SWP391")); // SE003 có học SWP391
+
+        attempt("Delete course SWP391", () -> {
+            courseService.deleteCourse("SWP391");
+        });
+
+        System.out.println("--- After delete SWP391 ---");
+        System.out.println("Total courses: " + courseService.count());
+        System.out.println("SE003 enrolled in SWP391? " + enrollmentService.isEnrolled("SE003", "SWP391"));
     }
 }

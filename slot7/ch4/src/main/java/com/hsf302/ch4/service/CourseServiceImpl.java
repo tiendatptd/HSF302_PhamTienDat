@@ -3,12 +3,14 @@ package com.hsf302.ch4.service;
 import com.hsf302.ch4.dto.CourseEnrollmentCount;
 import com.hsf302.ch4.dto.CourseStatDTO;
 import com.hsf302.ch4.pojo.Course;
+import com.hsf302.ch4.pojo.Student;
 import com.hsf302.ch4.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,5 +127,22 @@ public class CourseServiceImpl implements CourseService {
             throw new IllegalArgumentException("Bonus capacity must be > 0");
         }
         return courseRepository.increaseCapacityBySemester(semester, bonus);
+    }
+
+    @Override
+    @Transactional // Bắt buộc để ghi dữ liệu
+    public void deleteCourse(String code) {
+        Course course = courseRepository.findByCode(code)
+                .orElseThrow(() -> new IllegalArgumentException("Cannot delete. Course not found: " + code));
+
+        // Phải dọn dẹp Owning Side (Student) trước khi xóa Inverse Side (Course)
+        // Tạo một list copy để tránh lỗi ConcurrentModificationException
+        List<Student> enrolledStudents = new ArrayList<>(course.getStudents());
+        for (Student s : enrolledStudents) {
+            s.unenroll(course); // Xóa liên kết trong Java object -> Hibernate tự xóa ở bảng student_courses
+        }
+
+        // Sau khi không còn liên kết khóa ngoại, tiến hành xóa khóa học
+        courseRepository.delete(course);
     }
 }

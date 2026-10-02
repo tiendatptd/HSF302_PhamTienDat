@@ -26,4 +26,5 @@ public interface CourseService {
     List<Course> searchByExample(Course probe);
     // ===== Part E =====
     int increaseCapacity(String semester, int bonus);
+    void deleteCourse(String code);
 }

@@ -23,4 +23,5 @@ public interface EnrollmentService {
     Student getStudentWithCourses(String studentCode);
     // ===== Part E =====
     void deleteStudent(String studentCode);
+    void enrollWithRollbackSimulation(String studentCode, String courseCode);
 }

@@ -120,4 +120,17 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             throw new IllegalArgumentException("Cannot delete. Student not found: " + studentCode);
         }
     }
+    @Override
+    @Transactional // Mở transaction
+    public void enrollWithRollbackSimulation(String studentCode, String courseCode) {
+        Student s = getStudent(studentCode);
+        Course c = getCourse(courseCode);
+
+        // 1. Thực hiện thay đổi: Đăng ký khóa học
+        s.enroll(c);
+
+        // 2. Cố tình gây lỗi ĐỂ test Rollback
+        // Mặc định Spring Data JPA sẽ tự động rollback với các lỗi RuntimeException
+        throw new IllegalStateException("Simulated system failure! Transaction must roll back.");
+    }
 }

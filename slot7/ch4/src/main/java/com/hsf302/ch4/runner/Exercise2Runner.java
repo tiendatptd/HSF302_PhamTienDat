@@ -35,7 +35,7 @@ public class Exercise2Runner implements CommandLineRunner {
 //        partD();
 //        bonus();        // chạy trên dữ liệu gốc → trước Part E
 //        partE();
-        todo22();
+        todo23();
     }
 
     private void partB() {
@@ -63,6 +63,7 @@ public class Exercise2Runner implements CommandLineRunner {
         todo20();
         todo21();
         todo22();
+        todo23();
         /* todo20(); todo21(); todo22(); todo23(); todo24(); */ }
 
     // ===== helpers =====
@@ -284,5 +285,22 @@ public class Exercise2Runner implements CommandLineRunner {
         System.out.println("--- After delete SWP391 ---");
         System.out.println("Total courses: " + courseService.count());
         System.out.println("SE003 enrolled in SWP391? " + enrollmentService.isEnrolled("SE003", "SWP391"));
+    }
+
+    // ===== TODO 23 =====
+    private void todo23() {
+        title("TODO 23: Transaction Rollback Simulation");
+
+        String studentCode = "SE004";
+        String courseCode = "PRJ301";
+
+        System.out.println("Before enroll: SE004 in PRJ301? " + enrollmentService.isEnrolled(studentCode, courseCode)); // Chắc chắn là false
+
+        attempt("Enroll SE004 to PRJ301 with simulated error", () -> {
+            enrollmentService.enrollWithRollbackSimulation(studentCode, courseCode);
+        });
+
+        System.out.println("After  enroll: SE004 in PRJ301? " + enrollmentService.isEnrolled(studentCode, courseCode));
+        // Phải VẪN LÀ FALSE vì transaction đã bị rollback!
     }
 }

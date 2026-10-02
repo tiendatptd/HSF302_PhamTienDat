@@ -89,4 +89,7 @@ public interface StudentRepository extends JpaRepository<Student, Long>,
 
     @Query("SELECT s FROM Student s LEFT JOIN FETCH s.courses WHERE s.studentCode = :code")
     Optional<Student> findByStudentCodeWithCourses(@Param("code") String studentCode);
+
+    // ===== Part E — DML =====
+    int deleteByStudentCode(String studentCode);
 }

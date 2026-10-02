@@ -111,4 +111,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         return studentRepository.findByStudentCodeWithCourses(studentCode)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentCode));
     }
+
+    @Override
+    @Transactional // Cấp quyền ghi dữ liệu
+    public void deleteStudent(String studentCode) {
+        int deletedRows = studentRepository.deleteByStudentCode(studentCode);
+        if (deletedRows == 0) {
+            throw new IllegalArgumentException("Cannot delete. Student not found: " + studentCode);
+        }
+    }
 }

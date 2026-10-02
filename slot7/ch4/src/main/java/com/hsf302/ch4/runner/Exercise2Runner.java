@@ -35,7 +35,7 @@ public class Exercise2Runner implements CommandLineRunner {
 //        partD();
 //        bonus();        // chạy trên dữ liệu gốc → trước Part E
 //        partE();
-        todo20();
+        todo21();
     }
 
     private void partB() {
@@ -61,6 +61,7 @@ public class Exercise2Runner implements CommandLineRunner {
     private void bonus() { /* todo25(); */ }
     private void partE() {
         todo20();
+        todo21();
         /* todo20(); todo21(); todo22(); todo23(); todo24(); */ }
 
     // ===== helpers =====
@@ -250,5 +251,20 @@ public class Exercise2Runner implements CommandLineRunner {
 
         System.out.println("--- After update (SU26) ---");
         printList("SU26 courses", courseService.findBySemester("SU26"));
+    }
+
+    // ===== TODO 21 =====
+    private void todo21() {
+        title("TODO 21: Delete Owning Side (Student)");
+
+        System.out.println("--- Before delete SE001 ---");
+        System.out.println("Total students: " + studentService.count()); // Giả sử StudentService của Ex1 có hàm count()
+
+        attempt("Delete student SE001", () -> {
+            enrollmentService.deleteStudent("SE001");
+        });
+
+        System.out.println("--- After delete SE001 ---");
+        System.out.println("SE001 enrolled in HSF302? " + enrollmentService.isEnrolled("SE001", "HSF302"));
     }
 }

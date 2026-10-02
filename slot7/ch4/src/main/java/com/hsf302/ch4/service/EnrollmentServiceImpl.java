@@ -133,4 +133,24 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         // Mặc định Spring Data JPA sẽ tự động rollback với các lỗi RuntimeException
         throw new IllegalStateException("Simulated system failure! Transaction must roll back.");
     }
+
+    @Override
+    @Transactional
+    public void safeEnroll(String studentCode, String courseCode) {
+        Student s = getStudent(studentCode);
+        Course c = getCourse(courseCode);
+
+        // Rule 1: Sinh viên đã đăng ký khóa này chưa?
+        if (s.getCourses().contains(c)) {
+            throw new IllegalStateException("Student already enrolled in this course");
+        }
+
+        // Rule 2: Khóa học đã hết chỗ chưa?
+        if (c.getStudents().size() >= c.getCapacity()) {
+            throw new IllegalStateException("Course is full! Capacity reached: " + c.getCapacity());
+        }
+
+        // Thỏa mãn các điều kiện -> Thực hiện lưu
+        s.enroll(c);
+    }
 }

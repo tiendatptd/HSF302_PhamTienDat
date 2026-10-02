@@ -35,7 +35,7 @@ public class Exercise2Runner implements CommandLineRunner {
 //        partD();
 //        bonus();        // chạy trên dữ liệu gốc → trước Part E
 //        partE();
-        todo23();
+        todo24();
     }
 
     private void partB() {
@@ -64,7 +64,8 @@ public class Exercise2Runner implements CommandLineRunner {
         todo21();
         todo22();
         todo23();
-        /* todo20(); todo21(); todo22(); todo23(); todo24(); */ }
+        todo24();
+         }
 
     // ===== helpers =====
     private void title(String t) {
@@ -302,5 +303,26 @@ public class Exercise2Runner implements CommandLineRunner {
 
         System.out.println("After  enroll: SE004 in PRJ301? " + enrollmentService.isEnrolled(studentCode, courseCode));
         // Phải VẪN LÀ FALSE vì transaction đã bị rollback!
+    }
+
+    // ===== TODO 24 =====
+    private void todo24() {
+        title("TODO 24: Safe Enrollment with Business Rules");
+
+        System.out.println("--- Course Stats Before ---");
+        printCourseStats(); // Gọi lại hàm in từ TODO 13
+
+        // Ca 1: AIL303 hiện đang full (4/4 chỗ). Cố tình nhét thêm SE001 vào.
+        attempt("Safe enroll SE001 to AIL303 (Expected: Fail - Full)", () -> {
+            enrollmentService.safeEnroll("SE001", "AIL303");
+        });
+
+        // Ca 2: PRJ301 còn trống. SE004 chưa đăng ký khóa này.
+        attempt("Safe enroll SE004 to PRJ301 (Expected: OK)", () -> {
+            enrollmentService.safeEnroll("SE004", "PRJ301");
+        });
+
+        System.out.println("\n--- Course Stats After ---");
+        printCourseStats();
     }
 }

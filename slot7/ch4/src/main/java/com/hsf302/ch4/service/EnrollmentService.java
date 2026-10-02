@@ -24,4 +24,5 @@ public interface EnrollmentService {
     // ===== Part E =====
     void deleteStudent(String studentCode);
     void enrollWithRollbackSimulation(String studentCode, String courseCode);
+    void safeEnroll(String studentCode, String courseCode);
 }

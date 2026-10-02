@@ -10,6 +10,7 @@ import org.hibernate.LazyInitializationException;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -34,7 +35,7 @@ public class Exercise2Runner implements CommandLineRunner {
 //        partD();
 //        bonus();        // chạy trên dữ liệu gốc → trước Part E
 //        partE();
-        todo17();
+        todo18();
     }
 
     private void partB() {
@@ -54,6 +55,7 @@ public class Exercise2Runner implements CommandLineRunner {
         todo15();
         todo16();
         todo17();
+        todo18();
         /* todo12(); todo13(); todo14(); todo15(); todo16(); todo17(); todo18(); todo19(); */ }
     private void bonus() { /* todo25(); */ }
     private void partE() { /* todo20(); todo21(); todo22(); todo23(); todo24(); */ }
@@ -199,5 +201,21 @@ public class Exercise2Runner implements CommandLineRunner {
         title("TODO 17: native SQL on join table - top 3 enrolled courses");
         courseService.findTopEnrolled(3).forEach(r -> System.out.printf(
                 "   %s | %-35s | %d student(s)%n", r.getCode(), r.getName(), r.getEnrolled()));
+    }
+
+    // ===== TODO 18 =====
+    private void todo18() {
+        title("TODO 18: Pagination with Pageable");
+
+        // Tìm khóa học có chữ "e", lấy trang đầu tiên (page 0), mỗi trang 2 bản ghi
+        Page<Course> page = courseService.searchCourses("e", 0, 2);
+
+        System.out.println("Search keyword: 'e', Page: 0, Size: 2");
+        System.out.println("  - Total elements : " + page.getTotalElements());
+        System.out.println("  - Total pages    : " + page.getTotalPages());
+        System.out.println("  - Is first page? : " + page.isFirst());
+        System.out.println("  - Is last page?  : " + page.isLast());
+
+        printList("Courses on this page", page.getContent());
     }
 }

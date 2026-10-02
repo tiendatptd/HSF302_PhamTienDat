@@ -5,6 +5,9 @@ import com.hsf302.ch4.dto.CourseStatDTO;
 import com.hsf302.ch4.pojo.Course;
 import com.hsf302.ch4.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,5 +90,15 @@ public class CourseServiceImpl implements CourseService {
             throw new IllegalArgumentException("n must be > 0");
         }
         return courseRepository.findTopEnrolledNative(n);
+    }
+
+    @Override
+    public Page<Course> searchCourses(String keyword, int page, int size) {
+        if (page < 0 || size <= 0) {
+            throw new IllegalArgumentException("Invalid page or size");
+        }
+        // PageRequest đếm từ 0
+        Pageable pageable = PageRequest.of(page, size, Sort.by("code").ascending());
+        return courseRepository.findByNameContainingIgnoreCase(keyword, pageable);
     }
 }

@@ -3,6 +3,7 @@ package com.hsf302.ch4.service;
 import com.hsf302.ch4.dto.CourseEnrollmentCount;
 import com.hsf302.ch4.dto.CourseStatDTO;
 import com.hsf302.ch4.pojo.Course;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +22,5 @@ public interface CourseService {
     List<Course> findFullCourses();
     Course getWithStudents(String code);
     List<CourseEnrollmentCount> findTopEnrolled(int n);
+    Page<Course> searchCourses(String keyword, int page, int size);
 }

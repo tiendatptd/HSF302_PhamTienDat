@@ -27,4 +27,5 @@ public interface CourseService {
     // ===== Part E =====
     int increaseCapacity(String semester, int bonus);
     void deleteCourse(String code);
+    List<Course> searchCoursesDynamically(String keyword, Integer minCredits, String semester);
 }

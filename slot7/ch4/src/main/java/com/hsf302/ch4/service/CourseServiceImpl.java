@@ -5,8 +5,10 @@ import com.hsf302.ch4.dto.CourseStatDTO;
 import com.hsf302.ch4.pojo.Course;
 import com.hsf302.ch4.pojo.Student;
 import com.hsf302.ch4.repository.CourseRepository;
+import com.hsf302.ch4.specification.CourseSpecs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,5 +146,15 @@ public class CourseServiceImpl implements CourseService {
 
         // Sau khi không còn liên kết khóa ngoại, tiến hành xóa khóa học
         courseRepository.delete(course);
+    }
+
+    @Override
+    public List<Course> searchCoursesDynamically(String keyword, Integer minCredits, String semester) {
+        Specification<Course> spec = Specification
+                .where(CourseSpecs.hasNameContaining(keyword))
+                .and(CourseSpecs.hasMinCredits(minCredits))
+                .and(CourseSpecs.hasSemester(semester));
+
+        return courseRepository.findAll(spec);
     }
 }

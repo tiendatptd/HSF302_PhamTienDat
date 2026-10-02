@@ -35,7 +35,7 @@ public class Exercise2Runner implements CommandLineRunner {
 //        partD();
 //        bonus();        // chạy trên dữ liệu gốc → trước Part E
 //        partE();
-        todo24();
+        todo25();
     }
 
     private void partB() {
@@ -58,7 +58,10 @@ public class Exercise2Runner implements CommandLineRunner {
         todo18();
         todo19();
         }
-    private void bonus() { /* todo25(); */ }
+    private void bonus() {
+        todo25();
+    }
+
     private void partE() {
         todo20();
         todo21();
@@ -324,5 +327,18 @@ public class Exercise2Runner implements CommandLineRunner {
 
         System.out.println("\n--- Course Stats After ---");
         printCourseStats();
+    }
+
+    // ===== TODO 25 (Bonus) =====
+    private void todo25() {
+        title("TODO 25 (Bonus): Dynamic Filtering with JPA Specification");
+
+        // Test 1: Tìm môn có chữ "a", ít nhất 3 tín chỉ, thuộc FA26
+        System.out.println("Search 1: name has 'a', min credits = 3, semester = 'FA26'");
+        printList("Result 1", courseService.searchCoursesDynamically("a", 3, "FA26"));
+
+        // Test 2: Bỏ trống keyword và semester, chỉ tìm môn có tín chỉ >= 4
+        System.out.println("\nSearch 2: min credits = 4 (others ignored)");
+        printList("Result 2", courseService.searchCoursesDynamically(null, 4, null));
     }
 }

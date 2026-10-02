@@ -31,7 +31,7 @@ public class Exercise2Runner implements CommandLineRunner {
 //        partD();
 //        bonus();        // chạy trên dữ liệu gốc → trước Part E
 //        partE();
-        todo14();
+        todo15();
     }
 
     private void partB() {
@@ -48,6 +48,7 @@ public class Exercise2Runner implements CommandLineRunner {
         todo12();
         todo13();
         todo14();
+        todo15();
         /* todo12(); todo13(); todo14(); todo15(); todo16(); todo17(); todo18(); todo19(); */ }
     private void bonus() { /* todo25(); */ }
     private void partE() { /* todo20(); todo21(); todo22(); todo23(); todo24(); */ }
@@ -151,5 +152,12 @@ public class Exercise2Runner implements CommandLineRunner {
         enrollmentService.getCreditSummary(7).forEach(d -> System.out.printf(
                 "   %s | %-15s | %d course(s) | %d credits%n",
                 d.studentCode(), d.fullName(), d.courseCount(), d.totalCredits()));
+    }
+
+    // ===== TODO 15 =====
+    private void todo15() {
+        title("TODO 15: SIZE() on collections");
+        printList("(a) Full courses", courseService.findFullCourses());
+        printList("(b) Students with more than 2 courses", enrollmentService.findStudentsWithMoreThan(2));
     }
 }

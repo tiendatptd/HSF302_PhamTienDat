@@ -5,10 +5,7 @@ import com.hsf302.ch4.dto.CourseStatDTO;
 import com.hsf302.ch4.pojo.Course;
 import com.hsf302.ch4.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,5 +97,23 @@ public class CourseServiceImpl implements CourseService {
         // PageRequest đếm từ 0
         Pageable pageable = PageRequest.of(page, size, Sort.by("code").ascending());
         return courseRepository.findByNameContainingIgnoreCase(keyword, pageable);
+    }
+
+
+    @Override
+    public List<Course> searchByExample(Course probe) {
+        // Cấu hình Matcher:
+        // - Bỏ qua các field null
+        // - Với kiểu String: tìm kiếm chứa chuỗi (contains) và không phân biệt hoa thường (ignore case)
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                .withIgnoreCase();
+
+        // Tạo Example từ đối tượng mẫu và cấu hình Matcher
+        Example<Course> example = Example.of(probe, matcher);
+
+        // findAll(Example) đã được JpaRepository hỗ trợ sẵn
+        return courseRepository.findAll(example);
     }
 }

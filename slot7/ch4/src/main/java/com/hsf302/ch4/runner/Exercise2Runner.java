@@ -35,7 +35,7 @@ public class Exercise2Runner implements CommandLineRunner {
 //        partD();
 //        bonus();        // chạy trên dữ liệu gốc → trước Part E
 //        partE();
-        todo18();
+        todo19();
     }
 
     private void partB() {
@@ -56,7 +56,8 @@ public class Exercise2Runner implements CommandLineRunner {
         todo16();
         todo17();
         todo18();
-        /* todo12(); todo13(); todo14(); todo15(); todo16(); todo17(); todo18(); todo19(); */ }
+        todo19();
+        }
     private void bonus() { /* todo25(); */ }
     private void partE() { /* todo20(); todo21(); todo22(); todo23(); todo24(); */ }
 
@@ -217,5 +218,19 @@ public class Exercise2Runner implements CommandLineRunner {
         System.out.println("  - Is last page?  : " + page.isLast());
 
         printList("Courses on this page", page.getContent());
+    }
+
+    // ===== TODO 19 =====
+    private void todo19() {
+        title("TODO 19: Dynamic search with Query By Example (QBE)");
+
+        // Tạo đối tượng mẫu (probe): Tìm khóa học có tên chứa "management" và học kỳ "SU26"
+        Course probe = new Course();
+        probe.setName("management");
+        probe.setSemester("SU26");
+        // Các field khác (credits, capacity, code) để mặc định là null -> QBE sẽ tự bỏ qua
+
+        System.out.println("Searching by probe: name='management', semester='SU26'");
+        printList("QBE Result", courseService.searchByExample(probe));
     }
 }

@@ -23,4 +23,5 @@ public interface CourseService {
     Course getWithStudents(String code);
     List<CourseEnrollmentCount> findTopEnrolled(int n);
     Page<Course> searchCourses(String keyword, int page, int size);
+    List<Course> searchByExample(Course probe);
 }

@@ -15,7 +15,8 @@ public class SinhVienController {
         List<SinhVien> danhSach = List.of(
                 new SinhVien("SV001", "Nguyễn Văn An", 8.5),
                 new SinhVien("SV002", "Trần Thị Bình", 6.2),
-                new SinhVien("SV003", "Lê Hoàng Cường", 7.0)
+                new SinhVien("SV003", "Lê Hoàng Cường", 7.0),
+                new SinhVien("SV004", "Lê Quốc", 5.0)
         );
         model.addAttribute("sinhViens", danhSach);
         model.addAttribute("tieuDe", "Danh sách sinh viên");

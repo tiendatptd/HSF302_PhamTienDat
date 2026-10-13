@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/layout :: commonHead('Đăng ký tài khoản')}"></th:block>
+</head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('dangky')}"></nav>
+
+<main class="container" style="max-width: 550px">
+    <th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+
+    <h2 class="h4 mb-3"><i class="bi bi-person-plus me-2"></i>Đăng ký tài khoản</h2>
+
+    <!-- novalidate: Tắt kiểm tra mặc định của trình duyệt để test Bean Validation phía Server -->
+    <form th:action="@{/dangky}" th:object="${dangKyForm}" method="post" novalidate
+          class="card card-body shadow-sm">
+
+        <!-- Tóm tắt nếu form có bất kỳ lỗi nào -->
+        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-warning py-2">
+            <i class="bi bi-exclamation-circle me-1"></i>Vui lòng kiểm tra lại các thông tin bên dưới.
+        </div>
+
+        <!-- 1. Họ tên -->
+        <div class="mb-3">
+            <label for="hoTen" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" th:field="*{hoTen}"
+                   th:classappend="${#fields.hasErrors('hoTen')} ? 'is-invalid'"
+                   placeholder="Nhập họ tên (2 - 50 ký tự)..."/>
+            <div class="invalid-feedback" th:errors="*{hoTen}">Lỗi họ tên</div>
+        </div>
+
+        <!-- 2. Email -->
+        <div class="mb-3">
+            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" th:field="*{email}"
+                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                   placeholder="ten@example.com"/>
+            <div class="invalid-feedback" th:errors="*{email}">Lỗi email</div>
+        </div>
+
+        <!-- 3. Mật khẩu -->
+        <div class="mb-3">
+            <label for="matKhau" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
+            <input type="password" class="form-control" th:field="*{matKhau}"
+                   th:classappend="${#fields.hasErrors('matKhau')} ? 'is-invalid'"
+                   placeholder="Từ 6 ký tự trở lên..."/>
+            <div class="invalid-feedback" th:errors="*{matKhau}">Lỗi mật khẩu</div>
+        </div>
+
+        <!-- 4. Tuổi -->
+        <div class="mb-3">
+            <label for="tuoi" class="form-label">Tuổi <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" th:field="*{tuoi}"
+                   th:classappend="${#fields.hasErrors('tuoi')} ? 'is-invalid'"
+                   placeholder="Từ 18 đến 100"/>
+            <div class="invalid-feedback" th:errors="*{tuoi}">Lỗi tuổi</div>
+        </div>
+
+        <div class="d-flex gap-2 mt-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check2-circle me-1"></i>Đăng ký
+            </button>
+            <a th:href="@{/dangky}" class="btn btn-outline-secondary">Làm mới</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

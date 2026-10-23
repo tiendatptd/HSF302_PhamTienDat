@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+<head>
+    <title>Thông tin Sinh viên</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2 class="mb-3" th:text="${student.id == null ? 'Thêm Sinh viên' : 'Cập nhật Sinh viên'}"></h2>
+
+    <form th:action="@{/students/save}" th:object="${student}" method="post" class="w-50">
+        <!-- Trường ẩn để chứa ID khi update -->
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label class="form-label">Tên sinh viên:</label>
+            <input type="text" class="form-control" th:field="*{name}" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email:</label>
+            <input type="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ngày sinh:</label>
+            <input type="date" class="form-control" th:field="*{birthDate}" th:classappend="${#fields.hasErrors('birthDate')} ? 'is-invalid' : ''" />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">GPA (0-10):</label>
+            <input type="number" step="0.1" class="form-control" th:field="*{gpa}" th:classappend="${#fields.hasErrors('gpa')} ? 'is-invalid' : ''" />
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('gpa')}" th:errors="*{gpa}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Lưu</button>
+        <a th:href="@{/students}" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+</body>
+</html>

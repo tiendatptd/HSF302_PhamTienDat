@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    // Spring Data JPA đã tự động cung cấp các hàm save(), findAll(), findById(), deleteById()... 
+    // Spring Data JPA đã tự động cung cấp các hàm save(), findAll(), findById(), deleteById()...
 }

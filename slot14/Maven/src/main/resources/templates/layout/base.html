@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Student Management</title>
+    <!-- Link đến file bootstrap đã cấu hình ở bước trước -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/students}">Hệ thống Quản lý Sinh viên</a>
+    </div>
+</nav>
+
+<div class="container">
+    <!-- Chỗ này sẽ được thay thế bằng nội dung của các trang con -->
+    <div layout:fragment="content"></div>
+</div>
+</body>
+</html>

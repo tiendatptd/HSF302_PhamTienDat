@@ -24,4 +24,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void deleteById(Long id) { studentRepository.deleteById(id); }
+
+    @Override
+    public List<Student> searchByName(String keyword) {
+        return studentRepository.findByNameContainingIgnoreCase(keyword);
+    }
 }

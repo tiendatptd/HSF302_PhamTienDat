@@ -11,6 +11,15 @@
         <h2>Danh sách Sinh viên</h2>
         <a th:href="@{/students/create}" class="btn btn-primary">Thêm sinh viên mới</a>
     </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form th:action="@{/students}" method="get" class="d-flex">
+                <input type="text" name="keyword" class="form-control me-2" placeholder="Nhập tên sinh viên cần tìm..." th:value="${keyword}">
+                <button type="submit" class="btn btn-outline-success">Tìm kiếm</button>
+                <a th:href="@{/students}" class="btn btn-outline-secondary ms-2">Hủy</a>
+            </form>
+        </div>
+    </div>
 
     <table class="table table-bordered table-hover">
         <thead class="table-light">

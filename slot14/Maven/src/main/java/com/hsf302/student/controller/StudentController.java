@@ -15,12 +15,7 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
-
-    @GetMapping
-    public String listStudents(Model model) {
-        model.addAttribute("students", studentService.findAll());
-        return "student/list"; // Đường dẫn view HTML
-    }
+    
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
@@ -52,5 +47,17 @@ public class StudentController {
     public String deleteStudent(@PathVariable("id") Long id) {
         studentService.deleteById(id);
         return "redirect:/students";
+    }
+
+    @GetMapping
+    public String listStudents(Model model, @RequestParam(value = "keyword", required = false) String keyword) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            model.addAttribute("students", studentService.searchByName(keyword));
+            model.addAttribute("keyword", keyword);
+        } else {
+            model.addAttribute("students", studentService.findAll());
+            model.addAttribute("keyword", "");
+        }
+        return "student/list";
     }
 }

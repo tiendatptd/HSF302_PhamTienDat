@@ -8,4 +8,5 @@ public interface StudentService {
     Student findById(Long id);
     void save(Student student);
     void deleteById(Long id);
+    List<Student> searchByName(String keyword);
 }

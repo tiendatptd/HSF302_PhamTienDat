@@ -4,6 +4,7 @@ import com.hsf302.student.entity.Student;
 import com.hsf302.student.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,14 +51,23 @@ public class StudentController {
     }
 
     @GetMapping
-    public String listStudents(Model model, @RequestParam(value = "keyword", required = false) String keyword) {
+    public String listStudents(Model model,
+                               @RequestParam(value = "keyword", required = false) String keyword,
+                               @RequestParam(value = "pageNo", defaultValue = "1") int pageNo) {
+        int pageSize = 5; // Số lượng sinh viên trên 1 trang
+        Page<Student> page;
+
         if (keyword != null && !keyword.trim().isEmpty()) {
-            model.addAttribute("students", studentService.searchByName(keyword));
+            page = studentService.searchByName(keyword, pageNo, pageSize);
             model.addAttribute("keyword", keyword);
         } else {
-            model.addAttribute("students", studentService.findAll());
+            page = studentService.findAll(pageNo, pageSize);
             model.addAttribute("keyword", "");
         }
+
+        model.addAttribute("students", page.getContent());
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
         return "student/list";
     }
 }

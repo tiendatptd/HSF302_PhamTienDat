@@ -1,6 +1,8 @@
 package com.hsf302.student.service;
 
 import com.hsf302.student.entity.Student;
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public interface StudentService {
@@ -9,4 +11,6 @@ public interface StudentService {
     void save(Student student);
     void deleteById(Long id);
     List<Student> searchByName(String keyword);
+    Page<Student> findAll(int pageNo, int pageSize);
+    Page<Student> searchByName(String keyword, int pageNo, int pageSize);
 }

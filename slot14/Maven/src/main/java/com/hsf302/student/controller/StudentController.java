@@ -2,6 +2,7 @@ package com.hsf302.student.controller;
 
 import com.hsf302.student.entity.Student;
 import com.hsf302.student.service.StudentService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 @Controller
 @RequestMapping("/students")
@@ -86,5 +91,30 @@ public class StudentController {
         studentService.deleteById(id);
         redirectAttributes.addFlashAttribute("successMessage", "Xóa sinh viên thành công!");
         return "redirect:/students";
+    }
+
+    @GetMapping("/export")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        // Thiết lập định dạng trả về là CSV
+        response.setContentType("text/csv; charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\"students.csv\"");
+
+        PrintWriter writer = response.getWriter();
+        // Thêm ký tự BOM (Byte Order Mark) để Excel nhận diện đúng tiếng Việt UTF-8
+        writer.write('\ufeff');
+
+        // Ghi dòng tiêu đề (Header)
+        writer.println("ID,Tên Sinh Viên,Email,Ngày Sinh,GPA");
+
+        // Lấy toàn bộ dữ liệu và ghi từng dòng
+        List<Student> students = studentService.getAllStudents();
+        for (Student student : students) {
+            writer.printf("%d,%s,%s,%s,%.1f\n",
+                    student.getId(),
+                    student.getName(),
+                    student.getEmail(),
+                    student.getBirthDate(),
+                    student.getGpa());
+        }
     }
 }

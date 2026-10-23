@@ -15,4 +15,5 @@ public interface StudentService {
     Page<Student> searchByName(String keyword, int pageNo, int pageSize);
     Page<Student> findAll(int pageNo, int pageSize, String sortField, String sortDir);
     Page<Student> searchByName(String keyword, int pageNo, int pageSize, String sortField, String sortDir);
+    List<Student> getAllStudents();
 }

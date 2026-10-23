@@ -61,4 +61,9 @@ public class StudentServiceImpl implements StudentService {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
         return studentRepository.findByNameContainingIgnoreCase(keyword, pageable);
     }
+
+    @Override
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
+    }
 }

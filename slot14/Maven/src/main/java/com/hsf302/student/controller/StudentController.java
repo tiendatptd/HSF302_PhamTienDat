@@ -15,7 +15,7 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
-    
+
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {

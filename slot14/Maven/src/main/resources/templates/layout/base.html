@@ -17,7 +17,15 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" th:href="@{/students}">Hệ thống Quản lý Sinh viên</a>
+        <!-- Thay thế text title -->
+        <a class="navbar-brand" th:href="@{/students}" th:text="#{app.title}">Hệ thống Quản lý Sinh viên</a>
+
+        <!-- Nút chuyển ngôn ngữ -->
+        <div class="ms-auto">
+            <a th:href="@{${requestURI}(lang='en')}" class="text-white text-decoration-none me-2" th:text="#{lang.en}">English</a>
+            <span class="text-white">|</span>
+            <a th:href="@{${requestURI}(lang='vi')}" class="text-white text-decoration-none ms-2" th:text="#{lang.vi}">Tiếng Việt</a>
+        </div>
     </div>
 </nav>
 

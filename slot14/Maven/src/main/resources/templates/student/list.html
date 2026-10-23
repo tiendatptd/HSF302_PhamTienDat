@@ -3,47 +3,23 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base.html}">
 <head>
-    <title>Danh sách Sinh viên</title>
+    <title th:text="#{list.heading}">Danh sách Sinh viên</title>
 </head>
 <body>
-<!-- Modal Xác nhận xóa -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xóa sinh viên này không? Hành động này không thể hoàn tác.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <a id="btnConfirmDelete" href="" class="btn btn-danger">Xóa</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Script để truyền URL động vào nút Xóa trong Modal -->
-<script>
-    function setDeleteUrl(url) {
-        document.getElementById('btnConfirmDelete').href = url;
-    }
-</script>
 <div layout:fragment="content">
-    
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Danh sách Sinh viên</h2>
-        <div>
-            <a th:href="@{/students/export}" class="btn btn-success me-2">Xuất CSV</a>
-            <a th:href="@{/students/create}" class="btn btn-primary">Thêm sinh viên mới</a>
-        </div>
-    </div>
+
     <!-- Thông báo Success -->
     <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mb-3" role="alert">
         <span th:text="${successMessage}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 th:text="#{list.heading}">Danh sách Sinh viên</h2>
+        <div>
+            <a th:href="@{/students/export}" class="btn btn-success me-2" th:text="#{btn.export}">Xuất CSV</a>
+            <a th:href="@{/students/create}" class="btn btn-primary" th:text="#{btn.add}">Thêm sinh viên mới</a>
+        </div>
     </div>
 
     <div class="row mb-3">
@@ -59,20 +35,20 @@
     <table class="table table-bordered table-hover">
         <thead class="table-light">
         <tr>
-            <th>ID</th>
+            <th th:text="#{col.id}">ID</th>
             <th>
                 <a th:href="@{/students(pageNo=${currentPage}, keyword=${keyword}, sortField='name', sortDir=${reverseSortDir})}">
-                    Tên <span th:if="${sortField == 'name'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span>
+                    <span th:text="#{col.name}">Tên</span> <span th:if="${sortField == 'name'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span>
                 </a>
             </th>
-            <th>Email</th>
-            <th>Ngày sinh</th>
+            <th th:text="#{col.email}">Email</th>
+            <th th:text="#{col.dob}">Ngày sinh</th>
             <th>
                 <a th:href="@{/students(pageNo=${currentPage}, keyword=${keyword}, sortField='gpa', sortDir=${reverseSortDir})}">
                     GPA <span th:if="${sortField == 'gpa'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span>
                 </a>
             </th>
-            <th>Hành động</th>
+            <th th:text="#{col.action}">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -83,27 +59,60 @@
             <td th:text="${student.birthDate}"></td>
             <td th:text="${student.gpa}"></td>
             <td>
-                <a th:href="@{/students/edit/{id}(id=${student.id})}" class="btn btn-sm btn-warning">Sửa</a>
-                <a th:href="@{/students/delete/{id}(id=${student.id})}"
-                   class="btn btn-sm btn-danger"
-                   onclick="return confirm('Bạn có chắc chắn muốn xóa sinh viên này?');">Xóa</a>
+                <a th:href="@{/students/edit/{id}(id=${student.id})}" class="btn btn-sm btn-warning" th:text="#{btn.edit}">Sửa</a>
+
+                <!-- Nút Xóa gọi Modal (TODO 12) và đa ngôn ngữ (TODO 15) -->
+                <button type="button" class="btn btn-sm btn-danger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal"
+                        th:attr="onclick=|setDeleteUrl('/students/delete/${student.id}')|"
+                        th:text="#{btn.delete}">Xóa</button>
             </td>
         </tr>
         </tbody>
     </table>
+
     <nav th:if="${totalPages > 1}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/students(pageNo=${currentPage - 1}, keyword=${keyword})}">Trước</a>
+                <a class="page-link" th:href="@{/students(pageNo=${currentPage - 1}, keyword=${keyword}, sortField=${sortField}, sortDir=${sortDir})}">Trước</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${currentPage == i} ? 'active'">
-                <a class="page-link" th:href="@{/students(pageNo=${i}, keyword=${keyword})}" th:text="${i}"></a>
+                <a class="page-link" th:href="@{/students(pageNo=${i}, keyword=${keyword}, sortField=${sortField}, sortDir=${sortDir})}" th:text="${i}"></a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{/students(pageNo=${i}, keyword=${keyword}, sortField=${sortField}, sortDir=${sortDir})}" th:text="${i}"></a>
+                <!-- Sửa lại logic nút Sau cho chuẩn phân trang -->
+                <a class="page-link" th:href="@{/students(pageNo=${currentPage + 1}, keyword=${keyword}, sortField=${sortField}, sortDir=${sortDir})}">Sau</a>
             </li>
         </ul>
     </nav>
+
+    <!-- Modal Xác nhận xóa (Chuyển vào trong layout:fragment) -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa sinh viên này không? Hành động này không thể hoàn tác.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <a id="btnConfirmDelete" href="" class="btn btn-danger" th:text="#{btn.delete}">Xóa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script để truyền URL động vào nút Xóa trong Modal -->
+    <script>
+        function setDeleteUrl(url) {
+            document.getElementById('btnConfirmDelete').href = url;
+        }
+    </script>
+
 </div>
 </body>
 </html>

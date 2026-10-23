@@ -40,21 +40,26 @@ public class StudentController {
     @GetMapping
     public String listStudents(Model model,
                                @RequestParam(value = "keyword", required = false) String keyword,
-                               @RequestParam(value = "pageNo", defaultValue = "1") int pageNo) {
-        int pageSize = 5; // Số lượng sinh viên trên 1 trang
+                               @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+                               @RequestParam(value = "sortField", defaultValue = "name") String sortField,
+                               @RequestParam(value = "sortDir", defaultValue = "asc") String sortDir) {
+        int pageSize = 5;
         Page<Student> page;
 
         if (keyword != null && !keyword.trim().isEmpty()) {
-            page = studentService.searchByName(keyword, pageNo, pageSize);
+            page = studentService.searchByName(keyword, pageNo, pageSize, sortField, sortDir);
             model.addAttribute("keyword", keyword);
         } else {
-            page = studentService.findAll(pageNo, pageSize);
+            page = studentService.findAll(pageNo, pageSize, sortField, sortDir);
             model.addAttribute("keyword", "");
         }
 
         model.addAttribute("students", page.getContent());
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         return "student/list";
     }
 

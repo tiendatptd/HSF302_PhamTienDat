@@ -31,10 +31,18 @@
         <thead class="table-light">
         <tr>
             <th>ID</th>
-            <th>Tên</th>
+            <th>
+                <a th:href="@{/students(pageNo=${currentPage}, keyword=${keyword}, sortField='name', sortDir=${reverseSortDir})}">
+                    Tên <span th:if="${sortField == 'name'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span>
+                </a>
+            </th>
             <th>Email</th>
             <th>Ngày sinh</th>
-            <th>GPA</th>
+            <th>
+                <a th:href="@{/students(pageNo=${currentPage}, keyword=${keyword}, sortField='gpa', sortDir=${reverseSortDir})}">
+                    GPA <span th:if="${sortField == 'gpa'}" th:text="${sortDir == 'asc' ? '▲' : '▼'}"></span>
+                </a>
+            </th>
             <th>Hành động</th>
         </tr>
         </thead>
@@ -63,7 +71,7 @@
                 <a class="page-link" th:href="@{/students(pageNo=${i}, keyword=${keyword})}" th:text="${i}"></a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{/students(pageNo=${currentPage + 1}, keyword=${keyword})}">Sau</a>
+                <a class="page-link" th:href="@{/students(pageNo=${i}, keyword=${keyword}, sortField=${sortField}, sortDir=${sortDir})}" th:text="${i}"></a>
             </li>
         </ul>
     </nav>

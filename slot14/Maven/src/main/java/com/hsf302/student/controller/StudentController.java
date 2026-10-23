@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/students")
@@ -24,15 +25,6 @@ public class StudentController {
         return "student/form";
     }
 
-    @PostMapping("/save")
-    public String saveStudent(@Valid @ModelAttribute("student") Student student, BindingResult result) {
-        // Kiểm tra lỗi Validation
-        if (result.hasErrors()) {
-            return "student/form";
-        }
-        studentService.save(student);
-        return "redirect:/students"; // Quay về trang danh sách
-    }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
@@ -44,11 +36,6 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteStudent(@PathVariable("id") Long id) {
-        studentService.deleteById(id);
-        return "redirect:/students";
-    }
 
     @GetMapping
     public String listStudents(Model model,
@@ -69,5 +56,30 @@ public class StudentController {
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         return "student/list";
+    }
+
+    @PostMapping("/save")
+    public String saveStudent(@Valid @ModelAttribute("student") Student student,
+                              BindingResult result,
+                              RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            return "student/form";
+        }
+        boolean isNew = (student.getId() == null);
+        studentService.save(student);
+
+        if (isNew) {
+            redirectAttributes.addFlashAttribute("successMessage", "Thêm sinh viên mới thành công!");
+        } else {
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thông tin sinh viên thành công!");
+        }
+        return "redirect:/students";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteStudent(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        studentService.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Xóa sinh viên thành công!");
+        return "redirect:/students";
     }
 }

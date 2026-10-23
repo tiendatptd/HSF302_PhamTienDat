@@ -11,6 +11,12 @@
         <h2>Danh sách Sinh viên</h2>
         <a th:href="@{/students/create}" class="btn btn-primary">Thêm sinh viên mới</a>
     </div>
+    <!-- Thông báo Success -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <div class="row mb-3">
         <div class="col-md-6">
             <form th:action="@{/students}" method="get" class="d-flex">

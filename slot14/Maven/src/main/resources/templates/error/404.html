@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base.html}">
+<head>
+    <title>404 - Không tìm thấy trang</title>
+</head>
+<body>
+<div layout:fragment="content" class="text-center py-5">
+    <h1 class="display-1 fw-bold text-danger">404</h1>
+    <h2 class="mb-4">Ôi hỏng! Không tìm thấy trang.</h2>
+    <p class="lead mb-5 text-muted">Đường dẫn bạn đang cố truy cập không tồn tại, đã bị đổi tên hoặc tạm thời không khả dụng.</p>
+    <a th:href="@{/students}" class="btn btn-primary px-4 py-2">
+        Quay lại trang danh sách
+    </a>
+</div>
+</body>
+</html>

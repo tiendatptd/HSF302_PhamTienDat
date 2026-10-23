@@ -6,6 +6,31 @@
     <title>Danh sách Sinh viên</title>
 </head>
 <body>
+<!-- Modal Xác nhận xóa -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa sinh viên này không? Hành động này không thể hoàn tác.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <a id="btnConfirmDelete" href="" class="btn btn-danger">Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script để truyền URL động vào nút Xóa trong Modal -->
+<script>
+    function setDeleteUrl(url) {
+        document.getElementById('btnConfirmDelete').href = url;
+    }
+</script>
 <div layout:fragment="content">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Danh sách Sinh viên</h2>

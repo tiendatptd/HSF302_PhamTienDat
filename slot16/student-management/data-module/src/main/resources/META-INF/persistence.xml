@@ -7,13 +7,14 @@
     <persistence-unit name="student_pu" transaction-type="RESOURCE_LOCAL">
         <class>com.hsf302.entity.Student</class>
         <properties>
-            <!-- Cấu hình H2 Database -->
-            <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:studentdb;DB_CLOSE_DELAY=-1"/>
+            <!-- Cấu hình kết nối SQL Server -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=studentdb;encrypt=true;trustServerCertificate=true;"/>
             <property name="jakarta.persistence.jdbc.user" value="sa"/>
-            <property name="jakarta.persistence.jdbc.password" value=""/>
+            <property name="jakarta.persistence.jdbc.password" value="sa"/>
 
             <!-- Cấu hình Hibernate -->
+            <!-- update: Tự động tạo bảng students trong SQL Server nếu chưa có -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>

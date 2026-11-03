@@ -16,9 +16,12 @@ public class StudentService {
         return repository.findAll();
     }
 
-    public void saveStudent(Student student) {
-        // Bạn có thể thêm các logic kiểm tra (validate) nghiệp vụ ở đây trước khi lưu
+    public boolean saveStudent(Student student) {
+        if (repository.existsByEmail(student.getEmail())) {
+            return false;
+        }
         repository.save(student);
+        return true;
     }
 
     public void updateStudent(Student student) {
@@ -36,4 +39,3 @@ public class StudentService {
         return repository.search(keyword.trim());
     }
 }
-

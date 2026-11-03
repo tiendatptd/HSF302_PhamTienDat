@@ -70,7 +70,10 @@ public class StudentController {
 
         try {
             // Dùng Service thay cho Repository
-            service.saveStudent(student);
+            if (!service.saveStudent(student)) {
+                showAlert("Lỗi", "Email này đã được sử dụng. Vui lòng nhập email khác.");
+                return;
+            }
             loadData();
             clearForm();
         } catch (Exception e) {
@@ -96,7 +99,7 @@ public class StudentController {
             loadData();
             clearForm();
         } catch (Exception e) {
-            showAlert("Lỗi Database", "Không thể cập nhật sinh viên.");
+            showAlert("Lỗi Database", "Email đã tồn tại Không thể cập nhật sinh viên.");
         }
     }
 
@@ -122,6 +125,13 @@ public class StudentController {
             showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!");
             return false;
         }
+
+        String email = txtEmail.getText().trim();
+        if (!email.matches("^[A-Za-z0-9](?:[A-Za-z0-9.+-]*[A-Za-z0-9])?@gmail\\.com$") || email.contains("..")) {
+            showAlert("Lỗi", "Địa chỉ email không hợp lệ. Vui lòng nhập đúng định dạng Gmail (ví dụ: ten@gmail.com)!");
+            return false;
+        }
+
         return true;
     }
 

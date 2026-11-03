@@ -2,6 +2,7 @@ package com.hsf302.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "students")
@@ -17,9 +18,11 @@ public class Student {
     private Long id;
 
     @Column(nullable = false)
+    @Nationalized
     private String firstName;
 
     @Column(nullable = false)
+    @Nationalized
     private String lastName;
 
     @Column(unique = true, nullable = false)

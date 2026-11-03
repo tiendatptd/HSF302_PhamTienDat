@@ -19,16 +19,16 @@
     <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="colFirst" text="First Name" prefWidth="150"/>
-            <TableColumn fx:id="colLast" text="Last Name" prefWidth="150"/>
+            <TableColumn fx:id="colFirst" text="Tên" prefWidth="150"/>
+            <TableColumn fx:id="colLast" text="Họ" prefWidth="150"/>
             <TableColumn fx:id="colEmail" text="Email" prefWidth="200"/>
         </columns>
     </TableView>
 
     <!-- Form nhập thông tin và các nút chức năng -->
     <HBox spacing="10" alignment="CENTER">
-        <TextField fx:id="txtFirstName" promptText="First Name"/>
-        <TextField fx:id="txtLastName" promptText="Last Name"/>
+        <TextField fx:id="txtFirstName" promptText="Tên"/>
+        <TextField fx:id="txtLastName" promptText="Họ"/>
         <TextField fx:id="txtEmail" promptText="Email"/>
         <Button text="Add" onAction="#addStudent"/>
         <Button text="Update" onAction="#updateStudent"/>

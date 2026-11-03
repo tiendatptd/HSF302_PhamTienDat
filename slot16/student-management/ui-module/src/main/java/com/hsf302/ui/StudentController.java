@@ -69,7 +69,7 @@ public class StudentController {
                 .build();
 
         try {
-            // Dùng Service thay cho Repository
+
             if (!service.saveStudent(student)) {
                 showAlert("Lỗi", "Email này đã được sử dụng. Vui lòng nhập email khác.");
                 return;
@@ -111,7 +111,7 @@ public class StudentController {
         }
 
         try {
-            // Dùng Service thay cho Repository
+
             service.deleteStudent(selectedStudent.getId());
             loadData();
             clearForm();

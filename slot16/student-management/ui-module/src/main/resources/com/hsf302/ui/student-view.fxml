@@ -18,11 +18,13 @@
         </columns>
     </TableView>
 
-    <!-- Form nhập thông tin thêm mới -->
+    <!-- Form nhập thông tin và các nút chức năng -->
     <HBox spacing="10" alignment="CENTER">
         <TextField fx:id="txtFirstName" promptText="First Name"/>
         <TextField fx:id="txtLastName" promptText="Last Name"/>
         <TextField fx:id="txtEmail" promptText="Email"/>
-        <Button text="Add Student" onAction="#addStudent"/>
+        <Button text="Add" onAction="#addStudent"/>
+        <Button text="Update" onAction="#updateStudent"/>
+        <Button text="Delete" onAction="#deleteStudent"/>
     </HBox>
 </VBox>

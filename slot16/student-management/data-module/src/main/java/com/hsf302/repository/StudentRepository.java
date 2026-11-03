@@ -28,4 +28,23 @@ public class StudentRepository {
             return em.createQuery("SELECT s FROM Student s", Student.class).getResultList();
         }
     }
+
+    public void update(Student student) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.merge(student); // merge dùng để cập nhật entity đã tồn tại
+            em.getTransaction().commit();
+        }
+    }
+
+    public void delete(Long id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Student student = em.find(Student.class, id);
+            if (student != null) {
+                em.remove(student);
+            }
+            em.getTransaction().commit();
+        }
+    }
 }

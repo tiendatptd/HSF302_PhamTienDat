@@ -26,15 +26,26 @@ public class StudentController {
     private final StudentRepository repository = new StudentRepository();
     private final ObservableList<Student> studentList = FXCollections.observableArrayList();
 
+    // Biến lưu trữ sinh viên đang được click chọn trên bảng
+    private Student selectedStudent;
+
     @FXML
     public void initialize() {
-        // Gắn các cột trong bảng với các thuộc tính của lớp Student
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colFirst.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         colLast.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        // Tải dữ liệu lần đầu
+        // Bắt sự kiện khi click vào một dòng trong bảng để hiển thị dữ liệu lên form
+        studentTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                selectedStudent = newSelection;
+                txtFirstName.setText(newSelection.getFirstName());
+                txtLastName.setText(newSelection.getLastName());
+                txtEmail.setText(newSelection.getEmail());
+            }
+        });
+
         loadData();
     }
 
@@ -46,30 +57,74 @@ public class StudentController {
 
     @FXML
     public void addStudent(ActionEvent event) {
-        String firstName = txtFirstName.getText().trim();
-        String lastName = txtLastName.getText().trim();
-        String email = txtEmail.getText().trim();
-
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
-            showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!");
-            return;
-        }
+        if (!validateInput()) return;
 
         Student student = Student.builder()
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
+                .firstName(txtFirstName.getText().trim())
+                .lastName(txtLastName.getText().trim())
+                .email(txtEmail.getText().trim())
                 .build();
 
         try {
             repository.save(student);
-            loadData(); // Tải lại bảng sau khi lưu thành công
-            txtFirstName.clear();
-            txtLastName.clear();
-            txtEmail.clear();
+            loadData();
+            clearForm();
         } catch (Exception e) {
-            showAlert("Lỗi Database", "Không thể lưu sinh viên (có thể trùng email).");
+            showAlert("Lỗi Database", "Không thể thêm sinh viên.");
         }
+    }
+
+    @FXML
+    public void updateStudent(ActionEvent event) {
+        if (selectedStudent == null) {
+            showAlert("Thông báo", "Vui lòng chọn một sinh viên trong bảng để cập nhật!");
+            return;
+        }
+        if (!validateInput()) return;
+
+        selectedStudent.setFirstName(txtFirstName.getText().trim());
+        selectedStudent.setLastName(txtLastName.getText().trim());
+        selectedStudent.setEmail(txtEmail.getText().trim());
+
+        try {
+            repository.update(selectedStudent);
+            loadData();
+            clearForm();
+        } catch (Exception e) {
+            showAlert("Lỗi Database", "Không thể cập nhật sinh viên.");
+        }
+    }
+
+    @FXML
+    public void deleteStudent(ActionEvent event) {
+        if (selectedStudent == null) {
+            showAlert("Thông báo", "Vui lòng chọn một sinh viên trong bảng để xóa!");
+            return;
+        }
+
+        try {
+            repository.delete(selectedStudent.getId());
+            loadData();
+            clearForm();
+        } catch (Exception e) {
+            showAlert("Lỗi Database", "Không thể xóa sinh viên.");
+        }
+    }
+
+    private boolean validateInput() {
+        if (txtFirstName.getText().trim().isEmpty() || txtLastName.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty()) {
+            showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin!");
+            return false;
+        }
+        return true;
+    }
+
+    private void clearForm() {
+        txtFirstName.clear();
+        txtLastName.clear();
+        txtEmail.clear();
+        selectedStudent = null;
+        studentTable.getSelectionModel().clearSelection();
     }
 
     private void showAlert(String title, String message) {

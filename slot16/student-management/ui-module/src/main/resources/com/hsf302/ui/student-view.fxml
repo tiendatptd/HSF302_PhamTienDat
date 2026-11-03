@@ -8,6 +8,13 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
+    <!-- Thanh tìm kiếm -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="txtSearch" promptText="Nhập tên hoặc email để tìm..." prefWidth="250"/>
+        <Button text="Search" onAction="#searchStudent"/>
+        <Button text="Reset" onAction="#resetSearch"/>
+    </HBox>
+
     <!-- Bảng hiển thị danh sách sinh viên -->
     <TableView fx:id="studentTable" VBox.vgrow="ALWAYS">
         <columns>

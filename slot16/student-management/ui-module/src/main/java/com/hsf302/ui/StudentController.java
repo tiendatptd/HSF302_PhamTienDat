@@ -18,6 +18,7 @@ public class StudentController {
     @FXML private TableColumn<Student, String> colFirst;
     @FXML private TableColumn<Student, String> colLast;
     @FXML private TableColumn<Student, String> colEmail;
+    @FXML private TextField txtSearch;
 
     @FXML private TextField txtFirstName;
     @FXML private TextField txtLastName;
@@ -138,5 +139,18 @@ public class StudentController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void searchStudent(ActionEvent event) {
+        String keyword = txtSearch.getText();
+        List<Student> result = service.searchStudents(keyword);
+        studentList.setAll(result);
+    }
+
+    @FXML
+    public void resetSearch(ActionEvent event) {
+        txtSearch.clear();
+        loadData();
     }
 }

@@ -28,5 +28,12 @@ public class StudentService {
     public void deleteStudent(Long id) {
         repository.delete(id);
     }
+
+    public List<Student> searchStudents(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAllStudents(); // Nếu không nhập gì thì trả về tất cả
+        }
+        return repository.search(keyword.trim());
+    }
 }
 

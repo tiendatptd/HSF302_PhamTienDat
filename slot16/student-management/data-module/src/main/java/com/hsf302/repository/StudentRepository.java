@@ -47,4 +47,14 @@ public class StudentRepository {
             em.getTransaction().commit();
         }
     }
+    public List<Student> search(String keyword) {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "SELECT s FROM Student s WHERE LOWER(s.firstName) LIKE LOWER(:kw) " +
+                    "OR LOWER(s.lastName) LIKE LOWER(:kw) " +
+                    "OR LOWER(s.email) LIKE LOWER(:kw)";
+            return em.createQuery(jpql, Student.class)
+                    .setParameter("kw", "%" + keyword + "%")
+                    .getResultList();
+        }
+    }
 }

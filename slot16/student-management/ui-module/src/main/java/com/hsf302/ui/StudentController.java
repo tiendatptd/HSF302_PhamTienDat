@@ -1,7 +1,7 @@
 package com.hsf302.ui;
 
 import com.hsf302.entity.Student;
-import com.hsf302.repository.StudentRepository;
+import com.hsf302.service.StudentService; // Import thêm Service
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +23,8 @@ public class StudentController {
     @FXML private TextField txtLastName;
     @FXML private TextField txtEmail;
 
-    private final StudentRepository repository = new StudentRepository();
+    // Thay thế Repository bằng Service
+    private final StudentService service = new StudentService();
     private final ObservableList<Student> studentList = FXCollections.observableArrayList();
 
     // Biến lưu trữ sinh viên đang được click chọn trên bảng
@@ -50,7 +51,8 @@ public class StudentController {
     }
 
     private void loadData() {
-        List<Student> students = repository.findAll();
+        // Dùng Service thay cho Repository
+        List<Student> students = service.getAllStudents();
         studentList.setAll(students);
         studentTable.setItems(studentList);
     }
@@ -66,7 +68,8 @@ public class StudentController {
                 .build();
 
         try {
-            repository.save(student);
+            // Dùng Service thay cho Repository
+            service.saveStudent(student);
             loadData();
             clearForm();
         } catch (Exception e) {
@@ -87,7 +90,8 @@ public class StudentController {
         selectedStudent.setEmail(txtEmail.getText().trim());
 
         try {
-            repository.update(selectedStudent);
+            // Dùng Service thay cho Repository
+            service.updateStudent(selectedStudent);
             loadData();
             clearForm();
         } catch (Exception e) {
@@ -103,7 +107,8 @@ public class StudentController {
         }
 
         try {
-            repository.delete(selectedStudent.getId());
+            // Dùng Service thay cho Repository
+            service.deleteStudent(selectedStudent.getId());
             loadData();
             clearForm();
         } catch (Exception e) {

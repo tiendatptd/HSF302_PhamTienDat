@@ -1,4 +1,4 @@
-package entity;
+package com.hsf302.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -38,6 +38,7 @@
             <artifactId>data-module</artifactId>
             <version>${project.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>

@@ -2,41 +2,58 @@ package com.de180120.mvc.entity;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "devices") // Thay bằng tên bảng thực tế (ví dụ: smart_devices)
-public class Device {
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
+@Entity
+@Table(name = "devices")
+public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "device_id")
+    private Integer deviceId;
 
-    @Column(name = "device_name")
+    @Column(name = "device_code", unique = true, nullable = false, length = 6)
+    private String deviceCode;
+
+    @Column(name = "device_name", nullable = false, length = 200)
     private String deviceName;
 
-    @Column(name = "status")
-    private String status;
-
-    // Các trường khác tuỳ theo DB (ví dụ: price, description, manufacture_date...)
-    // @Column(name = "...")
-    // private Double price;
-
-    // Quan hệ N-1 với bảng Category
-    @ManyToOne
-    @JoinColumn(name = "category_id") // Tên cột khóa ngoại trong DB
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    // Constructors
+    @Column(name = "price", precision = 10, scale = 0, nullable = false)
+    private BigDecimal price;
+
+    @Column(name = "warranty_months", nullable = false)
+    private int warrantyMonths;
+
+    @Column(name = "installation_date", nullable = false)
+    private LocalDate installationDate;
+
+    @Column(name = "status", nullable = false, length = 10)
+    private String status;
+
+    //constructors
     public Device() {
     }
 
-    // Generate Getters và Setters cho toàn bộ thuộc tính
-    public Integer getId() {
-        return id;
+    //getters and setters
+    public Integer getDeviceId() {
+        return deviceId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setDeviceId(Integer deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceCode() {
+        return deviceCode;
+    }
+
+    public void setDeviceCode(String deviceCode) {
+        this.deviceCode = deviceCode;
     }
 
     public String getDeviceName() {
@@ -47,19 +64,43 @@ public class Device {
         this.deviceName = deviceName;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Category getCategory() {
         return category;
     }
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public int getWarrantyMonths() {
+        return warrantyMonths;
+    }
+
+    public void setWarrantyMonths(int warrantyMonths) {
+        this.warrantyMonths = warrantyMonths;
+    }
+
+    public LocalDate getInstallationDate() {
+        return installationDate;
+    }
+
+    public void setInstallationDate(LocalDate installationDate) {
+        this.installationDate = installationDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -1,4 +1,4 @@
-package com.se123456.mvc;
+package com.de180120.mvc;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

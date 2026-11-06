@@ -1,4 +1,4 @@
-package com.se123456.mvc;
+package com.de180120.mvc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -21,6 +21,7 @@
 <body>
 <h2>Smart Device Management (SDM)</h2>
 
+<!-- Nút thêm mới (chuẩn bị cho TODO 4) -->
 <a href="/devices/create">Add New Device</a>
 
 <table>
@@ -35,15 +36,15 @@
     </thead>
     <tbody>
     <tr th:each="device : ${devices}">
-        <td th:text="${device.id}"></td>
+        <td th:text="${device.deviceId}"></td>
         <td th:text="${device.deviceName}"></td>
         <td th:text="${device.status}"></td>
         <!-- Lấy tên danh mục thông qua quan hệ N-1 -->
         <td th:text="${device.category != null ? device.category.categoryName : 'N/A'}"></td>
         <td>
             <!--  sửa/xóa  -->
-            <a th:href="@{/devices/edit/{id}(id=${device.id})}">Edit</a> |
-            <a th:href="@{/devices/delete/{id}(id=${device.id})}"
+            <a th:href="@{/devices/edit/{id}(id=${device.deviceId})}">Edit</a> |
+            <a th:href="@{/devices/delete/{id}(id=${device.deviceId})}"
                onclick="return confirm('Are you sure you want to delete this device?');">Delete</a>
         </td>
     </tr>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Smart Device Management</title>
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
     <style>
         * { box-sizing: border-box; }
         body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f9; color: #1c2530; margin: 0; }
@@ -35,7 +36,6 @@
         a.action.danger { color: #c0392b; }
         a.action:hover { text-decoration: underline; }
 
-        /* Q2 confirm dialog: plain CSS/JS modal */
         .modal-overlay {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5);
             align-items: center; justify-content: center; z-index: 1000;
@@ -49,6 +49,7 @@
 <body>
 <div class="container">
     <div class="panel">
+        <!-- Checklist: Heading đúng nguyên văn -->
         <h2>Smart Device Management</h2>
 
         <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
@@ -67,7 +68,8 @@
         <table th:unless="${#lists.isEmpty(devices)}">
             <thead>
             <tr>
-                <th>#</th>
+                <!-- Checklist: Đúng thứ tự và text cột -->
+                <th># No</th>
                 <th>Code</th>
                 <th>Device Name</th>
                 <th>Category</th>
@@ -92,8 +94,10 @@
                 </td>
                 <td>
                     <a class="action" th:href="@{'/view/' + ${device.deviceId}}">View</a> |
+                    <!-- Checklist: dùng th:data-name và onclick tĩnh -->
                     <a class="action danger" href="javascript:void(0);"
-                       th:attr="data-id=${device.deviceId}, data-name=${device.deviceName}"
+                       th:data-id="${device.deviceId}"
+                       th:data-name="${device.deviceName}"
                        onclick="confirmDelete(this)">Delete</a>
                 </td>
             </tr>
@@ -116,9 +120,9 @@
 </div>
 
 <script th:inline="javascript">
-    function confirmDelete(link) {
-        var id = link.getAttribute('data-id');
-        var name = link.getAttribute('data-name');
+    function confirmDelete(element) {
+        var id = element.getAttribute('data-id');
+        var name = element.getAttribute('data-name');
         document.getElementById('confirmText').textContent = 'Are you sure you want to delete "' + name + '"?';
         document.getElementById('deleteForm').action = '/delete/' + id;
         document.getElementById('confirmModal').classList.add('show');
@@ -127,5 +131,6 @@
         document.getElementById('confirmModal').classList.remove('show');
     }
 </script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

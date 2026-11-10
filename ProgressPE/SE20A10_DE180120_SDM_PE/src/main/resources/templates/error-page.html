@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Error</title>
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
     <style>
         body { font-family: Arial, sans-serif; background: #f4f6f9; padding: 40px; }
         .alert { padding: 14px; background: #f8d7da; color: #7a1f27; border: 1px solid #eec2c6; border-radius: 4px; font-weight: bold; }
@@ -12,5 +13,6 @@
 <body>
 <div class="alert" th:text="${errorMessage}">Something went wrong while processing your request.</div>
 <a th:href="@{/}" class="btn">Back to list</a>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

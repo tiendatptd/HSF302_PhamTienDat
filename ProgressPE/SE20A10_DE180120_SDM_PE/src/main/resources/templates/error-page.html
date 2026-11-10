@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9; padding: 40px; }
+        .alert { padding: 14px; background: #f8d7da; color: #7a1f27; border: 1px solid #eec2c6; border-radius: 4px; font-weight: bold; }
+        .btn { display: inline-block; margin-top: 16px; padding: 8px 16px; background: #2471a3; color: #fff; text-decoration: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<div class="alert" th:text="${errorMessage}">Something went wrong while processing your request.</div>
+<a th:href="@{/}" class="btn">Back to list</a>
+</body>
+</html>
